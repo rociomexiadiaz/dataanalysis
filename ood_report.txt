@@ -1,0 +1,342 @@
+All
+
+FST 1.0 (N=869):
+  a close-up of human skin: 88.15%
+  not skin (background, objects, paper, clothes, etc.): 11.85%
+
+FST 2.0 (N=1498):
+  a close-up of human skin: 90.79%
+  not skin (background, objects, paper, clothes, etc.): 9.21%
+
+FST 3.0 (N=790):
+  a close-up of human skin: 89.62%
+  not skin (background, objects, paper, clothes, etc.): 10.38%
+
+FST 4.0 (N=2866):
+  a close-up of human skin: 75.96%
+  not skin (background, objects, paper, clothes, etc.): 24.04%
+
+FST 5.0 (N=231):
+  a close-up of human skin: 85.28%
+  not skin (background, objects, paper, clothes, etc.): 14.72%
+
+FST 6.0 (N=567):
+  a close-up of human skin: 77.78%
+  not skin (background, objects, paper, clothes, etc.): 22.22%
+
+=== Overall ===
+a close-up of human skin: 82.82% (N=5649)
+not skin (background, objects, paper, clothes, etc.): 17.18% (N=1172)
+
+FST 1.0 (N=766):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 74.28%
+  a close-up of healthy, clean human skin: 25.72%
+
+FST 2.0 (N=1360):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 79.85%
+  a close-up of healthy, clean human skin: 20.15%
+
+FST 3.0 (N=708):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 79.80%
+  a close-up of healthy, clean human skin: 20.20%
+
+FST 4.0 (N=2177):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 95.08%
+  a close-up of healthy, clean human skin: 4.92%
+
+FST 5.0 (N=197):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 77.66%
+  a close-up of healthy, clean human skin: 22.34%
+
+FST 6.0 (N=441):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 93.65%
+  a close-up of healthy, clean human skin: 6.35%
+
+=== Overall ===
+a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 85.96% (N=4856)
+a close-up of healthy, clean human skin: 14.04% (N=793)
+Minus dermie
+
+FST 1.0 (N=613):
+  a close-up of human skin: 90.70%
+  not skin (background, objects, paper, clothes, etc.): 9.30%
+
+FST 2.0 (N=1362):
+  a close-up of human skin: 91.70%
+  not skin (background, objects, paper, clothes, etc.): 8.30%
+
+FST 3.0 (N=726):
+  a close-up of human skin: 90.08%
+  not skin (background, objects, paper, clothes, etc.): 9.92%
+
+FST 4.0 (N=2838):
+  a close-up of human skin: 77.13%
+  not skin (background, objects, paper, clothes, etc.): 22.87%
+
+FST 5.0 (N=224):
+  a close-up of human skin: 87.50%
+  not skin (background, objects, paper, clothes, etc.): 12.50%
+
+FST 6.0 (N=557):
+  a close-up of human skin: 74.87%
+  not skin (background, objects, paper, clothes, etc.): 25.13%
+
+=== Overall ===
+a close-up of human skin: 83.24% (N=5261)
+not skin (background, objects, paper, clothes, etc.): 16.76% (N=1059)
+
+FST 1.0 (N=556):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 76.62%
+  a close-up of healthy, clean human skin: 23.38%
+
+FST 2.0 (N=1249):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 81.35%
+  a close-up of healthy, clean human skin: 18.65%
+
+FST 3.0 (N=654):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 81.65%
+  a close-up of healthy, clean human skin: 18.35%
+
+FST 4.0 (N=2189):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 95.25%
+  a close-up of healthy, clean human skin: 4.75%
+
+FST 5.0 (N=196):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 77.55%
+  a close-up of healthy, clean human skin: 22.45%
+
+FST 6.0 (N=417):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 92.57%
+  a close-up of healthy, clean human skin: 7.43%
+
+=== Overall ===
+a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 87.42% (N=4599)
+a close-up of healthy, clean human skin: 12.58% (N=662)
+Minus PADUFES
+
+FST 1.0 (N=785):
+  a close-up of human skin: 88.03%
+  not skin (background, objects, paper, clothes, etc.): 11.97%
+
+FST 2.0 (N=1005):
+  a close-up of human skin: 87.86%
+  not skin (background, objects, paper, clothes, etc.): 12.14%
+
+FST 3.0 (N=582):
+  a close-up of human skin: 87.29%
+  not skin (background, objects, paper, clothes, etc.): 12.71%
+
+FST 4.0 (N=2841):
+  a close-up of human skin: 78.00%
+  not skin (background, objects, paper, clothes, etc.): 22.00%
+
+FST 5.0 (N=227):
+  a close-up of human skin: 85.02%
+  not skin (background, objects, paper, clothes, etc.): 14.98%
+
+FST 6.0 (N=567):
+  a close-up of human skin: 81.66%
+  not skin (background, objects, paper, clothes, etc.): 18.34%
+
+=== Overall ===
+a close-up of human skin: 82.47% (N=4954)
+not skin (background, objects, paper, clothes, etc.): 17.53% (N=1053)
+
+FST 1.0 (N=691):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 73.81%
+  a close-up of healthy, clean human skin: 26.19%
+
+FST 2.0 (N=883):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 78.94%
+  a close-up of healthy, clean human skin: 21.06%
+
+FST 3.0 (N=508):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 80.51%
+  a close-up of healthy, clean human skin: 19.49%
+
+FST 4.0 (N=2216):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 95.49%
+  a close-up of healthy, clean human skin: 4.51%
+
+FST 5.0 (N=193):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 79.27%
+  a close-up of healthy, clean human skin: 20.73%
+
+FST 6.0 (N=463):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 93.95%
+  a close-up of healthy, clean human skin: 6.05%
+
+=== Overall ===
+a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 87.20% (N=4320)
+a close-up of healthy, clean human skin: 12.80% (N=634)
+Minus SCIN
+
+FST 1.0 (N=804):
+  a close-up of human skin: 91.67%
+  not skin (background, objects, paper, clothes, etc.): 8.33%
+
+FST 2.0 (N=1308):
+  a close-up of human skin: 93.65%
+  not skin (background, objects, paper, clothes, etc.): 6.35%
+
+FST 3.0 (N=629):
+  a close-up of human skin: 95.71%
+  not skin (background, objects, paper, clothes, etc.): 4.29%
+
+FST 4.0 (N=2746):
+  a close-up of human skin: 76.80%
+  not skin (background, objects, paper, clothes, etc.): 23.20%
+
+FST 5.0 (N=152):
+  a close-up of human skin: 93.42%
+  not skin (background, objects, paper, clothes, etc.): 6.58%
+
+FST 6.0 (N=500):
+  a close-up of human skin: 79.20%
+  not skin (background, objects, paper, clothes, etc.): 20.80%
+
+=== Overall ===
+a close-up of human skin: 84.88% (N=5211)
+not skin (background, objects, paper, clothes, etc.): 15.12% (N=928)
+
+FST 1.0 (N=737):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 72.46%
+  a close-up of healthy, clean human skin: 27.54%
+
+FST 2.0 (N=1225):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 77.96%
+  a close-up of healthy, clean human skin: 22.04%
+
+FST 3.0 (N=602):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 77.24%
+  a close-up of healthy, clean human skin: 22.76%
+
+FST 4.0 (N=2109):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 94.93%
+  a close-up of healthy, clean human skin: 5.07%
+
+FST 5.0 (N=142):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 75.35%
+  a close-up of healthy, clean human skin: 24.65%
+
+FST 6.0 (N=396):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 93.18%
+  a close-up of healthy, clean human skin: 6.82%
+
+=== Overall ===
+a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 85.05% (N=4432)
+a close-up of healthy, clean human skin: 14.95% (N=779)
+Minus Fitz
+
+FST 1.0 (N=409):
+  a close-up of human skin: 83.13%
+  not skin (background, objects, paper, clothes, etc.): 16.87%
+
+FST 2.0 (N=819):
+  a close-up of human skin: 88.77%
+  not skin (background, objects, paper, clothes, etc.): 11.23%
+
+FST 3.0 (N=433):
+  a close-up of human skin: 83.14%
+  not skin (background, objects, paper, clothes, etc.): 16.86%
+
+FST 4.0 (N=2591):
+  a close-up of human skin: 75.22%
+  not skin (background, objects, paper, clothes, etc.): 24.78%
+
+FST 5.0 (N=91):
+  a close-up of human skin: 71.43%
+  not skin (background, objects, paper, clothes, etc.): 28.57%
+
+FST 6.0 (N=507):
+  a close-up of human skin: 78.30%
+  not skin (background, objects, paper, clothes, etc.): 21.70%
+
+=== Overall ===
+a close-up of human skin: 79.13% (N=3838)
+not skin (background, objects, paper, clothes, etc.): 20.87% (N=1012)
+
+FST 1.0 (N=340):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 75.59%
+  a close-up of healthy, clean human skin: 24.41%
+
+FST 2.0 (N=727):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 82.39%
+  a close-up of healthy, clean human skin: 17.61%
+
+FST 3.0 (N=360):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 85.28%
+  a close-up of healthy, clean human skin: 14.72%
+
+FST 4.0 (N=1949):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 97.69%
+  a close-up of healthy, clean human skin: 2.31%
+
+FST 5.0 (N=65):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 92.31%
+  a close-up of healthy, clean human skin: 7.69%
+
+FST 6.0 (N=397):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 94.46%
+  a close-up of healthy, clean human skin: 5.54%
+
+=== Overall ===
+a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 91.25% (N=3502)
+a close-up of healthy, clean human skin: 8.75% (N=336)
+Minus India
+
+FST 1.0 (N=865):
+  a close-up of human skin: 89.48%
+  not skin (background, objects, paper, clothes, etc.): 10.52%
+
+FST 2.0 (N=1498):
+  a close-up of human skin: 91.32%
+  not skin (background, objects, paper, clothes, etc.): 8.68%
+
+FST 3.0 (N=790):
+  a close-up of human skin: 90.13%
+  not skin (background, objects, paper, clothes, etc.): 9.87%
+
+FST 4.0 (N=448):
+  a close-up of human skin: 85.49%
+  not skin (background, objects, paper, clothes, etc.): 14.51%
+
+FST 5.0 (N=230):
+  a close-up of human skin: 88.26%
+  not skin (background, objects, paper, clothes, etc.): 11.74%
+
+FST 6.0 (N=137):
+  a close-up of human skin: 81.75%
+  not skin (background, objects, paper, clothes, etc.): 18.25%
+
+=== Overall ===
+a close-up of human skin: 89.52% (N=3552)
+not skin (background, objects, paper, clothes, etc.): 10.48% (N=416)
+
+FST 1.0 (N=774):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 75.32%
+  a close-up of healthy, clean human skin: 24.68%
+
+FST 2.0 (N=1368):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 80.34%
+  a close-up of healthy, clean human skin: 19.66%
+
+FST 3.0 (N=712):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 80.34%
+  a close-up of healthy, clean human skin: 19.66%
+
+FST 4.0 (N=383):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 79.11%
+  a close-up of healthy, clean human skin: 20.89%
+
+FST 5.0 (N=203):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 79.31%
+  a close-up of healthy, clean human skin: 20.69%
+
+FST 6.0 (N=112):
+  a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 91.07%
+  a close-up of healthy, clean human skin: 8.93%
+
+=== Overall ===
+a close-up of diseased, unhealthy skin (eczema, acne, rashes, etc.): 79.39% (N=2820)
+a close-up of healthy, clean human skin: 20.61% (N=732)

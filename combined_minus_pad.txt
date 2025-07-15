@@ -1,0 +1,1072 @@
+Python Filename: train_Baseline.py
+Datasets: Dermie + SCIN + Fitzpatrick17k + India
+Metrics: === OVERALL ACCURACIES ===
+Top-1 Accuracy: 87.54%
+Top-3 Accuracy: 96.63%
+Top-5 Accuracy: 98.82%
+
+=== TOP-1 SENSITIVITY ===
+Condition: acne, Top-1 Sensitivity: 97.90%
+Condition: bcc, Top-1 Sensitivity: 0.00%
+Condition: eczema, Top-1 Sensitivity: 70.40%
+Condition: melanocytic nevus, Top-1 Sensitivity: 69.62%
+Condition: melanoma, Top-1 Sensitivity: 78.05%
+Condition: psoriasis, Top-1 Sensitivity: 77.98%
+Condition: scc, Top-1 Sensitivity: 71.43%
+Condition: urticaria, Top-1 Sensitivity: 47.37%
+Average Top-1 Sensitivity: 64.09%
+
+=== TOP-3 SENSITIVITY ===
+Condition: acne, Top-3 Sensitivity: 99.75%
+Condition: bcc, Top-3 Sensitivity: 0.00%
+Condition: eczema, Top-3 Sensitivity: 94.40%
+Condition: melanocytic nevus, Top-3 Sensitivity: 93.67%
+Condition: melanoma, Top-3 Sensitivity: 91.46%
+Condition: psoriasis, Top-3 Sensitivity: 96.33%
+Condition: scc, Top-3 Sensitivity: 71.43%
+Condition: urticaria, Top-3 Sensitivity: 84.21%
+Average Top-3 Sensitivity: 78.91%
+
+=== TOP-5 SENSITIVITY ===
+Condition: acne, Top-5 Sensitivity: 100.00%
+Condition: bcc, Top-5 Sensitivity: 28.57%
+Condition: eczema, Top-5 Sensitivity: 99.20%
+Condition: melanocytic nevus, Top-5 Sensitivity: 98.73%
+Condition: melanoma, Top-5 Sensitivity: 100.00%
+Condition: psoriasis, Top-5 Sensitivity: 99.08%
+Condition: scc, Top-5 Sensitivity: 85.71%
+Condition: urticaria, Top-5 Sensitivity: 89.47%
+Average Top-5 Sensitivity: 87.60%
+
+=== STRATIFIED TOP-1 ACCURACY ===
+Skin Tone: 1.0, Top-1 Accuracy: 66.92%
+Skin Tone: 2.0, Top-1 Accuracy: 74.86%
+Skin Tone: 3.0, Top-1 Accuracy: 68.42%
+Skin Tone: 4.0, Top-1 Accuracy: 97.39%
+Skin Tone: 5.0, Top-1 Accuracy: 73.91%
+Skin Tone: 6.0, Top-1 Accuracy: 92.03%
+
+=== STRATIFIED TOP-3 ACCURACY ===
+Skin Tone: 1.0, Top-3 Accuracy: 85.71%
+Skin Tone: 2.0, Top-3 Accuracy: 93.14%
+Skin Tone: 3.0, Top-3 Accuracy: 93.68%
+Skin Tone: 4.0, Top-3 Accuracy: 99.42%
+Skin Tone: 5.0, Top-3 Accuracy: 97.83%
+Skin Tone: 6.0, Top-3 Accuracy: 99.28%
+
+=== STRATIFIED TOP-5 ACCURACY ===
+Skin Tone: 1.0, Top-5 Accuracy: 94.74%
+Skin Tone: 2.0, Top-5 Accuracy: 97.71%
+Skin Tone: 3.0, Top-5 Accuracy: 96.84%
+Skin Tone: 4.0, Top-5 Accuracy: 99.85%
+Skin Tone: 5.0, Top-5 Accuracy: 100.00%
+Skin Tone: 6.0, Top-5 Accuracy: 100.00%
+
+=== STRATIFIED TOP-1 SENSITIVITY ===
+Skin Tone: 1.0
+  Condition: acne, Top-1 Sensitivity: 71.43%
+  Condition: bcc, Top-1 Sensitivity: 0.00%
+  Condition: eczema, Top-1 Sensitivity: 63.16%
+  Condition: melanocytic nevus, Top-1 Sensitivity: 66.67%
+  Condition: melanoma, Top-1 Sensitivity: 75.86%
+  Condition: psoriasis, Top-1 Sensitivity: 74.07%
+  Condition: scc, Top-1 Sensitivity: 66.67%
+  Condition: urticaria, Top-1 Sensitivity: 62.50%
+
+Skin Tone: 2.0
+  Condition: acne, Top-1 Sensitivity: 87.88%
+  Condition: bcc, Top-1 Sensitivity: 0.00%
+  Condition: eczema, Top-1 Sensitivity: 76.32%
+  Condition: melanocytic nevus, Top-1 Sensitivity: 68.18%
+  Condition: melanoma, Top-1 Sensitivity: 72.00%
+  Condition: psoriasis, Top-1 Sensitivity: 81.58%
+  Condition: scc, Top-1 Sensitivity: 100.00%
+  Condition: urticaria, Top-1 Sensitivity: 47.06%
+
+Skin Tone: 3.0
+  Condition: acne, Top-1 Sensitivity: 78.57%
+  Condition: eczema, Top-1 Sensitivity: 65.22%
+  Condition: melanocytic nevus, Top-1 Sensitivity: 66.67%
+  Condition: melanoma, Top-1 Sensitivity: 85.71%
+  Condition: psoriasis, Top-1 Sensitivity: 76.92%
+  Condition: urticaria, Top-1 Sensitivity: 43.75%
+
+Skin Tone: 4.0
+  Condition: acne, Top-1 Sensitivity: 99.68%
+  Condition: eczema, Top-1 Sensitivity: 76.92%
+  Condition: melanocytic nevus, Top-1 Sensitivity: 76.92%
+  Condition: melanoma, Top-1 Sensitivity: 83.33%
+  Condition: psoriasis, Top-1 Sensitivity: 83.33%
+  Condition: urticaria, Top-1 Sensitivity: 60.00%
+
+Skin Tone: 5.0
+  Condition: acne, Top-1 Sensitivity: 100.00%
+  Condition: eczema, Top-1 Sensitivity: 63.64%
+  Condition: melanocytic nevus, Top-1 Sensitivity: 80.00%
+  Condition: melanoma, Top-1 Sensitivity: 85.71%
+  Condition: psoriasis, Top-1 Sensitivity: 84.62%
+  Condition: urticaria, Top-1 Sensitivity: 20.00%
+
+Skin Tone: 6.0
+  Condition: acne, Top-1 Sensitivity: 96.72%
+  Condition: eczema, Top-1 Sensitivity: 62.50%
+  Condition: melanoma, Top-1 Sensitivity: 100.00%
+  Condition: psoriasis, Top-1 Sensitivity: 50.00%
+  Condition: urticaria, Top-1 Sensitivity: 0.00%
+
+
+=== STRATIFIED TOP-3 SENSITIVITY ===
+Skin Tone: 1.0
+  Condition: acne, Top-3 Sensitivity: 92.86%
+  Condition: bcc, Top-3 Sensitivity: 0.00%
+  Condition: eczema, Top-3 Sensitivity: 84.21%
+  Condition: melanocytic nevus, Top-3 Sensitivity: 95.83%
+  Condition: melanoma, Top-3 Sensitivity: 89.66%
+  Condition: psoriasis, Top-3 Sensitivity: 92.59%
+  Condition: scc, Top-3 Sensitivity: 66.67%
+  Condition: urticaria, Top-3 Sensitivity: 87.50%
+
+Skin Tone: 2.0
+  Condition: acne, Top-3 Sensitivity: 96.97%
+  Condition: bcc, Top-3 Sensitivity: 0.00%
+  Condition: eczema, Top-3 Sensitivity: 94.74%
+  Condition: melanocytic nevus, Top-3 Sensitivity: 95.45%
+  Condition: melanoma, Top-3 Sensitivity: 88.00%
+  Condition: psoriasis, Top-3 Sensitivity: 100.00%
+  Condition: scc, Top-3 Sensitivity: 100.00%
+  Condition: urticaria, Top-3 Sensitivity: 76.47%
+
+Skin Tone: 3.0
+  Condition: acne, Top-3 Sensitivity: 100.00%
+  Condition: eczema, Top-3 Sensitivity: 95.65%
+  Condition: melanocytic nevus, Top-3 Sensitivity: 86.67%
+  Condition: melanoma, Top-3 Sensitivity: 92.86%
+  Condition: psoriasis, Top-3 Sensitivity: 100.00%
+  Condition: urticaria, Top-3 Sensitivity: 87.50%
+
+Skin Tone: 4.0
+  Condition: acne, Top-3 Sensitivity: 100.00%
+  Condition: eczema, Top-3 Sensitivity: 100.00%
+  Condition: melanocytic nevus, Top-3 Sensitivity: 92.31%
+  Condition: melanoma, Top-3 Sensitivity: 100.00%
+  Condition: psoriasis, Top-3 Sensitivity: 91.67%
+  Condition: urticaria, Top-3 Sensitivity: 80.00%
+
+Skin Tone: 5.0
+  Condition: acne, Top-3 Sensitivity: 100.00%
+  Condition: eczema, Top-3 Sensitivity: 90.91%
+  Condition: melanocytic nevus, Top-3 Sensitivity: 100.00%
+  Condition: melanoma, Top-3 Sensitivity: 100.00%
+  Condition: psoriasis, Top-3 Sensitivity: 100.00%
+  Condition: urticaria, Top-3 Sensitivity: 100.00%
+
+Skin Tone: 6.0
+  Condition: acne, Top-3 Sensitivity: 100.00%
+  Condition: eczema, Top-3 Sensitivity: 100.00%
+  Condition: melanoma, Top-3 Sensitivity: 100.00%
+  Condition: psoriasis, Top-3 Sensitivity: 83.33%
+  Condition: urticaria, Top-3 Sensitivity: 100.00%
+
+
+=== STRATIFIED TOP-5 SENSITIVITY ===
+Skin Tone: 1.0
+  Condition: acne, Top-5 Sensitivity: 100.00%
+  Condition: bcc, Top-5 Sensitivity: 33.33%
+  Condition: eczema, Top-5 Sensitivity: 100.00%
+  Condition: melanocytic nevus, Top-5 Sensitivity: 100.00%
+  Condition: melanoma, Top-5 Sensitivity: 100.00%
+  Condition: psoriasis, Top-5 Sensitivity: 96.30%
+  Condition: scc, Top-5 Sensitivity: 83.33%
+  Condition: urticaria, Top-5 Sensitivity: 87.50%
+
+Skin Tone: 2.0
+  Condition: acne, Top-5 Sensitivity: 100.00%
+  Condition: bcc, Top-5 Sensitivity: 0.00%
+  Condition: eczema, Top-5 Sensitivity: 100.00%
+  Condition: melanocytic nevus, Top-5 Sensitivity: 100.00%
+  Condition: melanoma, Top-5 Sensitivity: 100.00%
+  Condition: psoriasis, Top-5 Sensitivity: 100.00%
+  Condition: scc, Top-5 Sensitivity: 100.00%
+  Condition: urticaria, Top-5 Sensitivity: 82.35%
+
+Skin Tone: 3.0
+  Condition: acne, Top-5 Sensitivity: 100.00%
+  Condition: eczema, Top-5 Sensitivity: 95.65%
+  Condition: melanocytic nevus, Top-5 Sensitivity: 93.33%
+  Condition: melanoma, Top-5 Sensitivity: 100.00%
+  Condition: psoriasis, Top-5 Sensitivity: 100.00%
+  Condition: urticaria, Top-5 Sensitivity: 93.75%
+
+Skin Tone: 4.0
+  Condition: acne, Top-5 Sensitivity: 100.00%
+  Condition: eczema, Top-5 Sensitivity: 100.00%
+  Condition: melanocytic nevus, Top-5 Sensitivity: 100.00%
+  Condition: melanoma, Top-5 Sensitivity: 100.00%
+  Condition: psoriasis, Top-5 Sensitivity: 100.00%
+  Condition: urticaria, Top-5 Sensitivity: 90.00%
+
+Skin Tone: 5.0
+  Condition: acne, Top-5 Sensitivity: 100.00%
+  Condition: eczema, Top-5 Sensitivity: 100.00%
+  Condition: melanocytic nevus, Top-5 Sensitivity: 100.00%
+  Condition: melanoma, Top-5 Sensitivity: 100.00%
+  Condition: psoriasis, Top-5 Sensitivity: 100.00%
+  Condition: urticaria, Top-5 Sensitivity: 100.00%
+
+Skin Tone: 6.0
+  Condition: acne, Top-5 Sensitivity: 100.00%
+  Condition: eczema, Top-5 Sensitivity: 100.00%
+  Condition: melanoma, Top-5 Sensitivity: 100.00%
+  Condition: psoriasis, Top-5 Sensitivity: 100.00%
+  Condition: urticaria, Top-5 Sensitivity: 100.00%
+
+
+Number of misclassified samples: 159
+
+=== MOST COMMON MISCLASSIFICATIONS (OVERALL) ===
+  urticaria → eczema: 20 times
+  eczema → psoriasis: 14 times
+  psoriasis → eczema: 14 times
+  eczema → acne: 9 times
+  melanocytic nevus → melanoma: 8 times
+
+=== MOST COMMON MISCLASSIFICATIONS BY SKIN TONE ===
+
+Skin Tone 1.0:
+  bcc → melanocytic nevus: 3 times
+  psoriasis → eczema: 3 times
+  melanocytic nevus → melanoma: 3 times
+
+Skin Tone 2.0:
+  urticaria → eczema: 6 times
+  eczema → psoriasis: 5 times
+  psoriasis → eczema: 4 times
+
+Skin Tone 3.0:
+  eczema → acne: 4 times
+  urticaria → eczema: 4 times
+  urticaria → psoriasis: 3 times
+
+Skin Tone 5.0:
+  urticaria → eczema: 4 times
+  psoriasis → eczema: 2 times
+  eczema → acne: 2 times
+
+Skin Tone 4.0:
+  eczema → psoriasis: 3 times
+  urticaria → eczema: 3 times
+  urticaria → melanocytic nevus: 1 times
+
+Skin Tone 6.0:
+  eczema → psoriasis: 3 times
+  acne → eczema: 3 times
+  psoriasis → eczema: 2 times
+GradCAM Plot Path: Logs/gradCAM_20250703_060713.png
+Train Dataset Visualisation: Logs/Train_dataset_20250703_060713.png
+Test Dataset Visualisation: Logs/Test_dataset_20250703_060713.png
+
+
+Python Filename: train_TABE.py
+Datasets: Dermie + SCIN + Fitzpatrick17k + India
+Metrics: === OVERALL ACCURACIES ===
+Top-1 Accuracy: 84.95%
+Top-3 Accuracy: 95.45%
+Top-5 Accuracy: 98.35%
+
+=== TOP-1 SENSITIVITY ===
+Condition: acne, Top-1 Sensitivity: 93.46%
+Condition: bcc, Top-1 Sensitivity: 0.00%
+Condition: eczema, Top-1 Sensitivity: 75.20%
+Condition: melanocytic nevus, Top-1 Sensitivity: 74.68%
+Condition: melanoma, Top-1 Sensitivity: 74.39%
+Condition: psoriasis, Top-1 Sensitivity: 71.56%
+Condition: scc, Top-1 Sensitivity: 71.43%
+Condition: urticaria, Top-1 Sensitivity: 52.63%
+Average Top-1 Sensitivity: 64.17%
+
+=== TOP-3 SENSITIVITY ===
+Condition: acne, Top-3 Sensitivity: 99.51%
+Condition: bcc, Top-3 Sensitivity: 0.00%
+Condition: eczema, Top-3 Sensitivity: 92.00%
+Condition: melanocytic nevus, Top-3 Sensitivity: 91.14%
+Condition: melanoma, Top-3 Sensitivity: 87.80%
+Condition: psoriasis, Top-3 Sensitivity: 91.74%
+Condition: scc, Top-3 Sensitivity: 100.00%
+Condition: urticaria, Top-3 Sensitivity: 80.70%
+Average Top-3 Sensitivity: 80.36%
+
+=== TOP-5 SENSITIVITY ===
+Condition: acne, Top-5 Sensitivity: 99.88%
+Condition: bcc, Top-5 Sensitivity: 42.86%
+Condition: eczema, Top-5 Sensitivity: 99.20%
+Condition: melanocytic nevus, Top-5 Sensitivity: 96.20%
+Condition: melanoma, Top-5 Sensitivity: 90.24%
+Condition: psoriasis, Top-5 Sensitivity: 98.17%
+Condition: scc, Top-5 Sensitivity: 100.00%
+Condition: urticaria, Top-5 Sensitivity: 96.49%
+Average Top-5 Sensitivity: 90.38%
+
+=== STRATIFIED TOP-1 ACCURACY ===
+Skin Tone: 1.0, Top-1 Accuracy: 66.92%
+Skin Tone: 2.0, Top-1 Accuracy: 73.71%
+Skin Tone: 3.0, Top-1 Accuracy: 70.53%
+Skin Tone: 4.0, Top-1 Accuracy: 95.21%
+Skin Tone: 5.0, Top-1 Accuracy: 67.39%
+Skin Tone: 6.0, Top-1 Accuracy: 81.16%
+
+=== STRATIFIED TOP-3 ACCURACY ===
+Skin Tone: 1.0, Top-3 Accuracy: 87.22%
+Skin Tone: 2.0, Top-3 Accuracy: 92.00%
+Skin Tone: 3.0, Top-3 Accuracy: 88.42%
+Skin Tone: 4.0, Top-3 Accuracy: 98.84%
+Skin Tone: 5.0, Top-3 Accuracy: 89.13%
+Skin Tone: 6.0, Top-3 Accuracy: 97.83%
+
+=== STRATIFIED TOP-5 ACCURACY ===
+Skin Tone: 1.0, Top-5 Accuracy: 93.23%
+Skin Tone: 2.0, Top-5 Accuracy: 97.14%
+Skin Tone: 3.0, Top-5 Accuracy: 95.79%
+Skin Tone: 4.0, Top-5 Accuracy: 99.85%
+Skin Tone: 5.0, Top-5 Accuracy: 97.83%
+Skin Tone: 6.0, Top-5 Accuracy: 99.28%
+
+=== STRATIFIED TOP-1 SENSITIVITY ===
+Skin Tone: 1.0
+  Condition: acne, Top-1 Sensitivity: 71.43%
+  Condition: bcc, Top-1 Sensitivity: 0.00%
+  Condition: eczema, Top-1 Sensitivity: 68.42%
+  Condition: melanocytic nevus, Top-1 Sensitivity: 83.33%
+  Condition: melanoma, Top-1 Sensitivity: 79.31%
+  Condition: psoriasis, Top-1 Sensitivity: 51.85%
+  Condition: scc, Top-1 Sensitivity: 83.33%
+  Condition: urticaria, Top-1 Sensitivity: 50.00%
+
+Skin Tone: 2.0
+  Condition: acne, Top-1 Sensitivity: 84.85%
+  Condition: bcc, Top-1 Sensitivity: 0.00%
+  Condition: eczema, Top-1 Sensitivity: 81.58%
+  Condition: melanocytic nevus, Top-1 Sensitivity: 72.73%
+  Condition: melanoma, Top-1 Sensitivity: 68.00%
+  Condition: psoriasis, Top-1 Sensitivity: 78.95%
+  Condition: scc, Top-1 Sensitivity: 0.00%
+  Condition: urticaria, Top-1 Sensitivity: 41.18%
+
+Skin Tone: 3.0
+  Condition: acne, Top-1 Sensitivity: 64.29%
+  Condition: eczema, Top-1 Sensitivity: 82.61%
+  Condition: melanocytic nevus, Top-1 Sensitivity: 60.00%
+  Condition: melanoma, Top-1 Sensitivity: 85.71%
+  Condition: psoriasis, Top-1 Sensitivity: 69.23%
+  Condition: urticaria, Top-1 Sensitivity: 56.25%
+
+Skin Tone: 4.0
+  Condition: acne, Top-1 Sensitivity: 97.11%
+  Condition: eczema, Top-1 Sensitivity: 76.92%
+  Condition: melanocytic nevus, Top-1 Sensitivity: 76.92%
+  Condition: melanoma, Top-1 Sensitivity: 66.67%
+  Condition: psoriasis, Top-1 Sensitivity: 83.33%
+  Condition: urticaria, Top-1 Sensitivity: 80.00%
+
+Skin Tone: 5.0
+  Condition: acne, Top-1 Sensitivity: 60.00%
+  Condition: eczema, Top-1 Sensitivity: 63.64%
+  Condition: melanocytic nevus, Top-1 Sensitivity: 80.00%
+  Condition: melanoma, Top-1 Sensitivity: 57.14%
+  Condition: psoriasis, Top-1 Sensitivity: 84.62%
+  Condition: urticaria, Top-1 Sensitivity: 40.00%
+
+Skin Tone: 6.0
+  Condition: acne, Top-1 Sensitivity: 84.43%
+  Condition: eczema, Top-1 Sensitivity: 50.00%
+  Condition: melanoma, Top-1 Sensitivity: 100.00%
+  Condition: psoriasis, Top-1 Sensitivity: 66.67%
+  Condition: urticaria, Top-1 Sensitivity: 0.00%
+
+
+=== STRATIFIED TOP-3 SENSITIVITY ===
+Skin Tone: 1.0
+  Condition: acne, Top-3 Sensitivity: 92.86%
+  Condition: bcc, Top-3 Sensitivity: 0.00%
+  Condition: eczema, Top-3 Sensitivity: 89.47%
+  Condition: melanocytic nevus, Top-3 Sensitivity: 91.67%
+  Condition: melanoma, Top-3 Sensitivity: 89.66%
+  Condition: psoriasis, Top-3 Sensitivity: 96.30%
+  Condition: scc, Top-3 Sensitivity: 100.00%
+  Condition: urticaria, Top-3 Sensitivity: 75.00%
+
+Skin Tone: 2.0
+  Condition: acne, Top-3 Sensitivity: 96.97%
+  Condition: bcc, Top-3 Sensitivity: 0.00%
+  Condition: eczema, Top-3 Sensitivity: 97.37%
+  Condition: melanocytic nevus, Top-3 Sensitivity: 90.91%
+  Condition: melanoma, Top-3 Sensitivity: 88.00%
+  Condition: psoriasis, Top-3 Sensitivity: 97.37%
+  Condition: scc, Top-3 Sensitivity: 100.00%
+  Condition: urticaria, Top-3 Sensitivity: 70.59%
+
+Skin Tone: 3.0
+  Condition: acne, Top-3 Sensitivity: 100.00%
+  Condition: eczema, Top-3 Sensitivity: 91.30%
+  Condition: melanocytic nevus, Top-3 Sensitivity: 86.67%
+  Condition: melanoma, Top-3 Sensitivity: 92.86%
+  Condition: psoriasis, Top-3 Sensitivity: 76.92%
+  Condition: urticaria, Top-3 Sensitivity: 81.25%
+
+Skin Tone: 4.0
+  Condition: acne, Top-3 Sensitivity: 100.00%
+  Condition: eczema, Top-3 Sensitivity: 88.46%
+  Condition: melanocytic nevus, Top-3 Sensitivity: 92.31%
+  Condition: melanoma, Top-3 Sensitivity: 66.67%
+  Condition: psoriasis, Top-3 Sensitivity: 83.33%
+  Condition: urticaria, Top-3 Sensitivity: 100.00%
+
+Skin Tone: 5.0
+  Condition: acne, Top-3 Sensitivity: 80.00%
+  Condition: eczema, Top-3 Sensitivity: 90.91%
+  Condition: melanocytic nevus, Top-3 Sensitivity: 100.00%
+  Condition: melanoma, Top-3 Sensitivity: 85.71%
+  Condition: psoriasis, Top-3 Sensitivity: 92.31%
+  Condition: urticaria, Top-3 Sensitivity: 80.00%
+
+Skin Tone: 6.0
+  Condition: acne, Top-3 Sensitivity: 99.18%
+  Condition: eczema, Top-3 Sensitivity: 87.50%
+  Condition: melanoma, Top-3 Sensitivity: 100.00%
+  Condition: psoriasis, Top-3 Sensitivity: 83.33%
+  Condition: urticaria, Top-3 Sensitivity: 100.00%
+
+
+=== STRATIFIED TOP-5 SENSITIVITY ===
+Skin Tone: 1.0
+  Condition: acne, Top-5 Sensitivity: 100.00%
+  Condition: bcc, Top-5 Sensitivity: 50.00%
+  Condition: eczema, Top-5 Sensitivity: 94.74%
+  Condition: melanocytic nevus, Top-5 Sensitivity: 91.67%
+  Condition: melanoma, Top-5 Sensitivity: 89.66%
+  Condition: psoriasis, Top-5 Sensitivity: 100.00%
+  Condition: scc, Top-5 Sensitivity: 100.00%
+  Condition: urticaria, Top-5 Sensitivity: 100.00%
+
+Skin Tone: 2.0
+  Condition: acne, Top-5 Sensitivity: 100.00%
+  Condition: bcc, Top-5 Sensitivity: 0.00%
+  Condition: eczema, Top-5 Sensitivity: 100.00%
+  Condition: melanocytic nevus, Top-5 Sensitivity: 100.00%
+  Condition: melanoma, Top-5 Sensitivity: 88.00%
+  Condition: psoriasis, Top-5 Sensitivity: 97.37%
+  Condition: scc, Top-5 Sensitivity: 100.00%
+  Condition: urticaria, Top-5 Sensitivity: 100.00%
+
+Skin Tone: 3.0
+  Condition: acne, Top-5 Sensitivity: 100.00%
+  Condition: eczema, Top-5 Sensitivity: 100.00%
+  Condition: melanocytic nevus, Top-5 Sensitivity: 100.00%
+  Condition: melanoma, Top-5 Sensitivity: 92.86%
+  Condition: psoriasis, Top-5 Sensitivity: 92.31%
+  Condition: urticaria, Top-5 Sensitivity: 87.50%
+
+Skin Tone: 4.0
+  Condition: acne, Top-5 Sensitivity: 100.00%
+  Condition: eczema, Top-5 Sensitivity: 100.00%
+  Condition: melanocytic nevus, Top-5 Sensitivity: 92.31%
+  Condition: melanoma, Top-5 Sensitivity: 100.00%
+  Condition: psoriasis, Top-5 Sensitivity: 100.00%
+  Condition: urticaria, Top-5 Sensitivity: 100.00%
+
+Skin Tone: 5.0
+  Condition: acne, Top-5 Sensitivity: 100.00%
+  Condition: eczema, Top-5 Sensitivity: 100.00%
+  Condition: melanocytic nevus, Top-5 Sensitivity: 100.00%
+  Condition: melanoma, Top-5 Sensitivity: 85.71%
+  Condition: psoriasis, Top-5 Sensitivity: 100.00%
+  Condition: urticaria, Top-5 Sensitivity: 100.00%
+
+Skin Tone: 6.0
+  Condition: acne, Top-5 Sensitivity: 99.18%
+  Condition: eczema, Top-5 Sensitivity: 100.00%
+  Condition: melanoma, Top-5 Sensitivity: 100.00%
+  Condition: psoriasis, Top-5 Sensitivity: 100.00%
+  Condition: urticaria, Top-5 Sensitivity: 100.00%
+
+
+Number of misclassified samples: 192
+
+=== MOST COMMON MISCLASSIFICATIONS (OVERALL) ===
+  acne → eczema: 31 times
+  psoriasis → eczema: 20 times
+  urticaria → eczema: 14 times
+  eczema → psoriasis: 12 times
+  acne → melanocytic nevus: 9 times
+
+=== MOST COMMON MISCLASSIFICATIONS BY SKIN TONE ===
+
+Skin Tone 1.0:
+  psoriasis → eczema: 9 times
+  acne → eczema: 4 times
+  melanoma → melanocytic nevus: 3 times
+
+Skin Tone 2.0:
+  psoriasis → eczema: 7 times
+  urticaria → acne: 4 times
+  urticaria → eczema: 3 times
+
+Skin Tone 3.0:
+  urticaria → eczema: 4 times
+  acne → melanocytic nevus: 3 times
+  melanocytic nevus → melanoma: 2 times
+
+Skin Tone 5.0:
+  urticaria → eczema: 2 times
+  melanoma → eczema: 2 times
+  eczema → psoriasis: 1 times
+
+Skin Tone 4.0:
+  acne → eczema: 13 times
+  eczema → psoriasis: 3 times
+  acne → urticaria: 3 times
+
+Skin Tone 6.0:
+  acne → eczema: 11 times
+  acne → melanocytic nevus: 5 times
+  eczema → psoriasis: 3 times
+GradCAM Plot Path: Logs/gradCAM_20250703_064002.png
+Train Dataset Visualisation: Logs/Train_dataset_20250703_064002.png
+Test Dataset Visualisation: Logs/Test_dataset_20250703_064002.png
+
+
+Python Filename: train_FairDisCo.py
+Datasets: Dermie + SCIN + Fitzpatrick17k + India
+Metrics: === OVERALL ACCURACIES ===
+Top-1 Accuracy: 63.48%
+Top-3 Accuracy: 63.48%
+Top-5 Accuracy: 63.48%
+
+=== TOP-1 SENSITIVITY ===
+Condition: acne, Top-1 Sensitivity: 100.00%
+Condition: bcc, Top-1 Sensitivity: 0.00%
+Condition: eczema, Top-1 Sensitivity: 0.00%
+Condition: melanocytic nevus, Top-1 Sensitivity: 0.00%
+Condition: melanoma, Top-1 Sensitivity: 0.00%
+Condition: psoriasis, Top-1 Sensitivity: 0.00%
+Condition: scc, Top-1 Sensitivity: 0.00%
+Condition: urticaria, Top-1 Sensitivity: 0.00%
+Average Top-1 Sensitivity: 12.50%
+
+=== TOP-3 SENSITIVITY ===
+Condition: acne, Top-3 Sensitivity: 100.00%
+Condition: bcc, Top-3 Sensitivity: 0.00%
+Condition: eczema, Top-3 Sensitivity: 0.00%
+Condition: melanocytic nevus, Top-3 Sensitivity: 0.00%
+Condition: melanoma, Top-3 Sensitivity: 0.00%
+Condition: psoriasis, Top-3 Sensitivity: 0.00%
+Condition: scc, Top-3 Sensitivity: 0.00%
+Condition: urticaria, Top-3 Sensitivity: 0.00%
+Average Top-3 Sensitivity: 12.50%
+
+=== TOP-5 SENSITIVITY ===
+Condition: acne, Top-5 Sensitivity: 100.00%
+Condition: bcc, Top-5 Sensitivity: 0.00%
+Condition: eczema, Top-5 Sensitivity: 0.00%
+Condition: melanocytic nevus, Top-5 Sensitivity: 0.00%
+Condition: melanoma, Top-5 Sensitivity: 0.00%
+Condition: psoriasis, Top-5 Sensitivity: 0.00%
+Condition: scc, Top-5 Sensitivity: 0.00%
+Condition: urticaria, Top-5 Sensitivity: 0.00%
+Average Top-5 Sensitivity: 12.50%
+
+=== STRATIFIED TOP-1 ACCURACY ===
+Skin Tone: 1.0, Top-1 Accuracy: 10.53%
+Skin Tone: 2.0, Top-1 Accuracy: 18.86%
+Skin Tone: 3.0, Top-1 Accuracy: 14.74%
+Skin Tone: 4.0, Top-1 Accuracy: 90.28%
+Skin Tone: 5.0, Top-1 Accuracy: 10.87%
+Skin Tone: 6.0, Top-1 Accuracy: 88.41%
+
+=== STRATIFIED TOP-3 ACCURACY ===
+Skin Tone: 1.0, Top-3 Accuracy: 10.53%
+Skin Tone: 2.0, Top-3 Accuracy: 18.86%
+Skin Tone: 3.0, Top-3 Accuracy: 14.74%
+Skin Tone: 4.0, Top-3 Accuracy: 90.28%
+Skin Tone: 5.0, Top-3 Accuracy: 10.87%
+Skin Tone: 6.0, Top-3 Accuracy: 88.41%
+
+=== STRATIFIED TOP-5 ACCURACY ===
+Skin Tone: 1.0, Top-5 Accuracy: 10.53%
+Skin Tone: 2.0, Top-5 Accuracy: 18.86%
+Skin Tone: 3.0, Top-5 Accuracy: 14.74%
+Skin Tone: 4.0, Top-5 Accuracy: 90.28%
+Skin Tone: 5.0, Top-5 Accuracy: 10.87%
+Skin Tone: 6.0, Top-5 Accuracy: 88.41%
+
+=== STRATIFIED TOP-1 SENSITIVITY ===
+Skin Tone: 1.0
+  Condition: acne, Top-1 Sensitivity: 100.00%
+  Condition: bcc, Top-1 Sensitivity: 0.00%
+  Condition: eczema, Top-1 Sensitivity: 0.00%
+  Condition: melanocytic nevus, Top-1 Sensitivity: 0.00%
+  Condition: melanoma, Top-1 Sensitivity: 0.00%
+  Condition: psoriasis, Top-1 Sensitivity: 0.00%
+  Condition: scc, Top-1 Sensitivity: 0.00%
+  Condition: urticaria, Top-1 Sensitivity: 0.00%
+
+Skin Tone: 2.0
+  Condition: acne, Top-1 Sensitivity: 100.00%
+  Condition: bcc, Top-1 Sensitivity: 0.00%
+  Condition: eczema, Top-1 Sensitivity: 0.00%
+  Condition: melanocytic nevus, Top-1 Sensitivity: 0.00%
+  Condition: melanoma, Top-1 Sensitivity: 0.00%
+  Condition: psoriasis, Top-1 Sensitivity: 0.00%
+  Condition: scc, Top-1 Sensitivity: 0.00%
+  Condition: urticaria, Top-1 Sensitivity: 0.00%
+
+Skin Tone: 3.0
+  Condition: acne, Top-1 Sensitivity: 100.00%
+  Condition: eczema, Top-1 Sensitivity: 0.00%
+  Condition: melanocytic nevus, Top-1 Sensitivity: 0.00%
+  Condition: melanoma, Top-1 Sensitivity: 0.00%
+  Condition: psoriasis, Top-1 Sensitivity: 0.00%
+  Condition: urticaria, Top-1 Sensitivity: 0.00%
+
+Skin Tone: 4.0
+  Condition: acne, Top-1 Sensitivity: 100.00%
+  Condition: eczema, Top-1 Sensitivity: 0.00%
+  Condition: melanocytic nevus, Top-1 Sensitivity: 0.00%
+  Condition: melanoma, Top-1 Sensitivity: 0.00%
+  Condition: psoriasis, Top-1 Sensitivity: 0.00%
+  Condition: urticaria, Top-1 Sensitivity: 0.00%
+
+Skin Tone: 5.0
+  Condition: acne, Top-1 Sensitivity: 100.00%
+  Condition: eczema, Top-1 Sensitivity: 0.00%
+  Condition: melanocytic nevus, Top-1 Sensitivity: 0.00%
+  Condition: melanoma, Top-1 Sensitivity: 0.00%
+  Condition: psoriasis, Top-1 Sensitivity: 0.00%
+  Condition: urticaria, Top-1 Sensitivity: 0.00%
+
+Skin Tone: 6.0
+  Condition: acne, Top-1 Sensitivity: 100.00%
+  Condition: eczema, Top-1 Sensitivity: 0.00%
+  Condition: melanoma, Top-1 Sensitivity: 0.00%
+  Condition: psoriasis, Top-1 Sensitivity: 0.00%
+  Condition: urticaria, Top-1 Sensitivity: 0.00%
+
+
+=== STRATIFIED TOP-3 SENSITIVITY ===
+Skin Tone: 1.0
+  Condition: acne, Top-3 Sensitivity: 100.00%
+  Condition: bcc, Top-3 Sensitivity: 0.00%
+  Condition: eczema, Top-3 Sensitivity: 0.00%
+  Condition: melanocytic nevus, Top-3 Sensitivity: 0.00%
+  Condition: melanoma, Top-3 Sensitivity: 0.00%
+  Condition: psoriasis, Top-3 Sensitivity: 0.00%
+  Condition: scc, Top-3 Sensitivity: 0.00%
+  Condition: urticaria, Top-3 Sensitivity: 0.00%
+
+Skin Tone: 2.0
+  Condition: acne, Top-3 Sensitivity: 100.00%
+  Condition: bcc, Top-3 Sensitivity: 0.00%
+  Condition: eczema, Top-3 Sensitivity: 0.00%
+  Condition: melanocytic nevus, Top-3 Sensitivity: 0.00%
+  Condition: melanoma, Top-3 Sensitivity: 0.00%
+  Condition: psoriasis, Top-3 Sensitivity: 0.00%
+  Condition: scc, Top-3 Sensitivity: 0.00%
+  Condition: urticaria, Top-3 Sensitivity: 0.00%
+
+Skin Tone: 3.0
+  Condition: acne, Top-3 Sensitivity: 100.00%
+  Condition: eczema, Top-3 Sensitivity: 0.00%
+  Condition: melanocytic nevus, Top-3 Sensitivity: 0.00%
+  Condition: melanoma, Top-3 Sensitivity: 0.00%
+  Condition: psoriasis, Top-3 Sensitivity: 0.00%
+  Condition: urticaria, Top-3 Sensitivity: 0.00%
+
+Skin Tone: 4.0
+  Condition: acne, Top-3 Sensitivity: 100.00%
+  Condition: eczema, Top-3 Sensitivity: 0.00%
+  Condition: melanocytic nevus, Top-3 Sensitivity: 0.00%
+  Condition: melanoma, Top-3 Sensitivity: 0.00%
+  Condition: psoriasis, Top-3 Sensitivity: 0.00%
+  Condition: urticaria, Top-3 Sensitivity: 0.00%
+
+Skin Tone: 5.0
+  Condition: acne, Top-3 Sensitivity: 100.00%
+  Condition: eczema, Top-3 Sensitivity: 0.00%
+  Condition: melanocytic nevus, Top-3 Sensitivity: 0.00%
+  Condition: melanoma, Top-3 Sensitivity: 0.00%
+  Condition: psoriasis, Top-3 Sensitivity: 0.00%
+  Condition: urticaria, Top-3 Sensitivity: 0.00%
+
+Skin Tone: 6.0
+  Condition: acne, Top-3 Sensitivity: 100.00%
+  Condition: eczema, Top-3 Sensitivity: 0.00%
+  Condition: melanoma, Top-3 Sensitivity: 0.00%
+  Condition: psoriasis, Top-3 Sensitivity: 0.00%
+  Condition: urticaria, Top-3 Sensitivity: 0.00%
+
+
+=== STRATIFIED TOP-5 SENSITIVITY ===
+Skin Tone: 1.0
+  Condition: acne, Top-5 Sensitivity: 100.00%
+  Condition: bcc, Top-5 Sensitivity: 0.00%
+  Condition: eczema, Top-5 Sensitivity: 0.00%
+  Condition: melanocytic nevus, Top-5 Sensitivity: 0.00%
+  Condition: melanoma, Top-5 Sensitivity: 0.00%
+  Condition: psoriasis, Top-5 Sensitivity: 0.00%
+  Condition: scc, Top-5 Sensitivity: 0.00%
+  Condition: urticaria, Top-5 Sensitivity: 0.00%
+
+Skin Tone: 2.0
+  Condition: acne, Top-5 Sensitivity: 100.00%
+  Condition: bcc, Top-5 Sensitivity: 0.00%
+  Condition: eczema, Top-5 Sensitivity: 0.00%
+  Condition: melanocytic nevus, Top-5 Sensitivity: 0.00%
+  Condition: melanoma, Top-5 Sensitivity: 0.00%
+  Condition: psoriasis, Top-5 Sensitivity: 0.00%
+  Condition: scc, Top-5 Sensitivity: 0.00%
+  Condition: urticaria, Top-5 Sensitivity: 0.00%
+
+Skin Tone: 3.0
+  Condition: acne, Top-5 Sensitivity: 100.00%
+  Condition: eczema, Top-5 Sensitivity: 0.00%
+  Condition: melanocytic nevus, Top-5 Sensitivity: 0.00%
+  Condition: melanoma, Top-5 Sensitivity: 0.00%
+  Condition: psoriasis, Top-5 Sensitivity: 0.00%
+  Condition: urticaria, Top-5 Sensitivity: 0.00%
+
+Skin Tone: 4.0
+  Condition: acne, Top-5 Sensitivity: 100.00%
+  Condition: eczema, Top-5 Sensitivity: 0.00%
+  Condition: melanocytic nevus, Top-5 Sensitivity: 0.00%
+  Condition: melanoma, Top-5 Sensitivity: 0.00%
+  Condition: psoriasis, Top-5 Sensitivity: 0.00%
+  Condition: urticaria, Top-5 Sensitivity: 0.00%
+
+Skin Tone: 5.0
+  Condition: acne, Top-5 Sensitivity: 100.00%
+  Condition: eczema, Top-5 Sensitivity: 0.00%
+  Condition: melanocytic nevus, Top-5 Sensitivity: 0.00%
+  Condition: melanoma, Top-5 Sensitivity: 0.00%
+  Condition: psoriasis, Top-5 Sensitivity: 0.00%
+  Condition: urticaria, Top-5 Sensitivity: 0.00%
+
+Skin Tone: 6.0
+  Condition: acne, Top-5 Sensitivity: 100.00%
+  Condition: eczema, Top-5 Sensitivity: 0.00%
+  Condition: melanoma, Top-5 Sensitivity: 0.00%
+  Condition: psoriasis, Top-5 Sensitivity: 0.00%
+  Condition: urticaria, Top-5 Sensitivity: 0.00%
+
+
+Number of misclassified samples: 466
+
+=== MOST COMMON MISCLASSIFICATIONS (OVERALL) ===
+  eczema → acne: 125 times
+  psoriasis → acne: 109 times
+  melanoma → acne: 82 times
+  melanocytic nevus → acne: 79 times
+  urticaria → acne: 57 times
+
+=== MOST COMMON MISCLASSIFICATIONS BY SKIN TONE ===
+
+Skin Tone 3.0:
+  eczema → acne: 23 times
+  urticaria → acne: 16 times
+  melanocytic nevus → acne: 15 times
+
+Skin Tone 1.0:
+  melanoma → acne: 29 times
+  psoriasis → acne: 27 times
+  melanocytic nevus → acne: 24 times
+
+Skin Tone 2.0:
+  psoriasis → acne: 38 times
+  eczema → acne: 38 times
+  melanoma → acne: 25 times
+
+Skin Tone 6.0:
+  eczema → acne: 8 times
+  psoriasis → acne: 6 times
+  urticaria → acne: 1 times
+
+Skin Tone 5.0:
+  psoriasis → acne: 13 times
+  eczema → acne: 11 times
+  melanoma → acne: 7 times
+
+Skin Tone 4.0:
+  eczema → acne: 26 times
+  melanocytic nevus → acne: 13 times
+  psoriasis → acne: 12 times
+Train Dataset Visualisation: Logs/Train_dataset_20250703_074034.png
+Test Dataset Visualisation: Logs/Test_dataset_20250703_074034.png
+GradCAM Plot Path: Logs/gradCAM_20250703_074034.png
+
+
+Python Filename: train_VAE.py
+Datasets: Dermie + SCIN + Fitzpatrick17k + India
+Metrics: === OVERALL ACCURACIES ===
+Top-1 Accuracy: 88.87%
+Top-3 Accuracy: 96.47%
+Top-5 Accuracy: 98.90%
+
+=== TOP-1 SENSITIVITY ===
+Condition: acne, Top-1 Sensitivity: 99.14%
+Condition: bcc, Top-1 Sensitivity: 0.00%
+Condition: eczema, Top-1 Sensitivity: 75.20%
+Condition: melanocytic nevus, Top-1 Sensitivity: 74.68%
+Condition: melanoma, Top-1 Sensitivity: 70.73%
+Condition: psoriasis, Top-1 Sensitivity: 77.98%
+Condition: scc, Top-1 Sensitivity: 42.86%
+Condition: urticaria, Top-1 Sensitivity: 56.14%
+Average Top-1 Sensitivity: 62.09%
+
+=== TOP-3 SENSITIVITY ===
+Condition: acne, Top-3 Sensitivity: 99.63%
+Condition: bcc, Top-3 Sensitivity: 42.86%
+Condition: eczema, Top-3 Sensitivity: 92.00%
+Condition: melanocytic nevus, Top-3 Sensitivity: 89.87%
+Condition: melanoma, Top-3 Sensitivity: 91.46%
+Condition: psoriasis, Top-3 Sensitivity: 94.50%
+Condition: scc, Top-3 Sensitivity: 85.71%
+Condition: urticaria, Top-3 Sensitivity: 89.47%
+Average Top-3 Sensitivity: 85.69%
+
+=== TOP-5 SENSITIVITY ===
+Condition: acne, Top-5 Sensitivity: 99.88%
+Condition: bcc, Top-5 Sensitivity: 85.71%
+Condition: eczema, Top-5 Sensitivity: 96.80%
+Condition: melanocytic nevus, Top-5 Sensitivity: 96.20%
+Condition: melanoma, Top-5 Sensitivity: 98.78%
+Condition: psoriasis, Top-5 Sensitivity: 100.00%
+Condition: scc, Top-5 Sensitivity: 85.71%
+Condition: urticaria, Top-5 Sensitivity: 94.74%
+Average Top-5 Sensitivity: 94.73%
+
+=== STRATIFIED TOP-1 ACCURACY ===
+Skin Tone: 1.0, Top-1 Accuracy: 63.16%
+Skin Tone: 2.0, Top-1 Accuracy: 76.00%
+Skin Tone: 3.0, Top-1 Accuracy: 78.95%
+Skin Tone: 4.0, Top-1 Accuracy: 97.39%
+Skin Tone: 5.0, Top-1 Accuracy: 89.13%
+Skin Tone: 6.0, Top-1 Accuracy: 94.20%
+
+=== STRATIFIED TOP-3 ACCURACY ===
+Skin Tone: 1.0, Top-3 Accuracy: 84.96%
+Skin Tone: 2.0, Top-3 Accuracy: 93.14%
+Skin Tone: 3.0, Top-3 Accuracy: 93.68%
+Skin Tone: 4.0, Top-3 Accuracy: 99.85%
+Skin Tone: 5.0, Top-3 Accuracy: 95.65%
+Skin Tone: 6.0, Top-3 Accuracy: 97.10%
+
+=== STRATIFIED TOP-5 ACCURACY ===
+Skin Tone: 1.0, Top-5 Accuracy: 96.24%
+Skin Tone: 2.0, Top-5 Accuracy: 96.57%
+Skin Tone: 3.0, Top-5 Accuracy: 97.89%
+Skin Tone: 4.0, Top-5 Accuracy: 99.85%
+Skin Tone: 5.0, Top-5 Accuracy: 100.00%
+Skin Tone: 6.0, Top-5 Accuracy: 100.00%
+
+=== STRATIFIED TOP-1 SENSITIVITY ===
+Skin Tone: 1.0
+  Condition: acne, Top-1 Sensitivity: 78.57%
+  Condition: bcc, Top-1 Sensitivity: 0.00%
+  Condition: eczema, Top-1 Sensitivity: 63.16%
+  Condition: melanocytic nevus, Top-1 Sensitivity: 75.00%
+  Condition: melanoma, Top-1 Sensitivity: 58.62%
+  Condition: psoriasis, Top-1 Sensitivity: 70.37%
+  Condition: scc, Top-1 Sensitivity: 50.00%
+  Condition: urticaria, Top-1 Sensitivity: 50.00%
+
+Skin Tone: 2.0
+  Condition: acne, Top-1 Sensitivity: 96.97%
+  Condition: bcc, Top-1 Sensitivity: 0.00%
+  Condition: eczema, Top-1 Sensitivity: 84.21%
+  Condition: melanocytic nevus, Top-1 Sensitivity: 63.64%
+  Condition: melanoma, Top-1 Sensitivity: 68.00%
+  Condition: psoriasis, Top-1 Sensitivity: 81.58%
+  Condition: scc, Top-1 Sensitivity: 0.00%
+  Condition: urticaria, Top-1 Sensitivity: 41.18%
+
+Skin Tone: 3.0
+  Condition: acne, Top-1 Sensitivity: 92.86%
+  Condition: eczema, Top-1 Sensitivity: 82.61%
+  Condition: melanocytic nevus, Top-1 Sensitivity: 80.00%
+  Condition: melanoma, Top-1 Sensitivity: 85.71%
+  Condition: psoriasis, Top-1 Sensitivity: 76.92%
+  Condition: urticaria, Top-1 Sensitivity: 56.25%
+
+Skin Tone: 4.0
+  Condition: acne, Top-1 Sensitivity: 99.84%
+  Condition: eczema, Top-1 Sensitivity: 65.38%
+  Condition: melanocytic nevus, Top-1 Sensitivity: 84.62%
+  Condition: melanoma, Top-1 Sensitivity: 83.33%
+  Condition: psoriasis, Top-1 Sensitivity: 75.00%
+  Condition: urticaria, Top-1 Sensitivity: 80.00%
+
+Skin Tone: 5.0
+  Condition: acne, Top-1 Sensitivity: 100.00%
+  Condition: eczema, Top-1 Sensitivity: 90.91%
+  Condition: melanocytic nevus, Top-1 Sensitivity: 80.00%
+  Condition: melanoma, Top-1 Sensitivity: 85.71%
+  Condition: psoriasis, Top-1 Sensitivity: 92.31%
+  Condition: urticaria, Top-1 Sensitivity: 80.00%
+
+Skin Tone: 6.0
+  Condition: acne, Top-1 Sensitivity: 99.18%
+  Condition: eczema, Top-1 Sensitivity: 50.00%
+  Condition: melanoma, Top-1 Sensitivity: 100.00%
+  Condition: psoriasis, Top-1 Sensitivity: 66.67%
+  Condition: urticaria, Top-1 Sensitivity: 0.00%
+
+
+=== STRATIFIED TOP-3 SENSITIVITY ===
+Skin Tone: 1.0
+  Condition: acne, Top-3 Sensitivity: 85.71%
+  Condition: bcc, Top-3 Sensitivity: 33.33%
+  Condition: eczema, Top-3 Sensitivity: 73.68%
+  Condition: melanocytic nevus, Top-3 Sensitivity: 87.50%
+  Condition: melanoma, Top-3 Sensitivity: 86.21%
+  Condition: psoriasis, Top-3 Sensitivity: 92.59%
+  Condition: scc, Top-3 Sensitivity: 100.00%
+  Condition: urticaria, Top-3 Sensitivity: 100.00%
+
+Skin Tone: 2.0
+  Condition: acne, Top-3 Sensitivity: 100.00%
+  Condition: bcc, Top-3 Sensitivity: 100.00%
+  Condition: eczema, Top-3 Sensitivity: 94.74%
+  Condition: melanocytic nevus, Top-3 Sensitivity: 90.91%
+  Condition: melanoma, Top-3 Sensitivity: 92.00%
+  Condition: psoriasis, Top-3 Sensitivity: 97.37%
+  Condition: scc, Top-3 Sensitivity: 0.00%
+  Condition: urticaria, Top-3 Sensitivity: 76.47%
+
+Skin Tone: 3.0
+  Condition: acne, Top-3 Sensitivity: 92.86%
+  Condition: eczema, Top-3 Sensitivity: 95.65%
+  Condition: melanocytic nevus, Top-3 Sensitivity: 93.33%
+  Condition: melanoma, Top-3 Sensitivity: 100.00%
+  Condition: psoriasis, Top-3 Sensitivity: 92.31%
+  Condition: urticaria, Top-3 Sensitivity: 87.50%
+
+Skin Tone: 4.0
+  Condition: acne, Top-3 Sensitivity: 100.00%
+  Condition: eczema, Top-3 Sensitivity: 100.00%
+  Condition: melanocytic nevus, Top-3 Sensitivity: 92.31%
+  Condition: melanoma, Top-3 Sensitivity: 100.00%
+  Condition: psoriasis, Top-3 Sensitivity: 100.00%
+  Condition: urticaria, Top-3 Sensitivity: 100.00%
+
+Skin Tone: 5.0
+  Condition: acne, Top-3 Sensitivity: 100.00%
+  Condition: eczema, Top-3 Sensitivity: 100.00%
+  Condition: melanocytic nevus, Top-3 Sensitivity: 80.00%
+  Condition: melanoma, Top-3 Sensitivity: 85.71%
+  Condition: psoriasis, Top-3 Sensitivity: 100.00%
+  Condition: urticaria, Top-3 Sensitivity: 100.00%
+
+Skin Tone: 6.0
+  Condition: acne, Top-3 Sensitivity: 100.00%
+  Condition: eczema, Top-3 Sensitivity: 75.00%
+  Condition: melanoma, Top-3 Sensitivity: 100.00%
+  Condition: psoriasis, Top-3 Sensitivity: 66.67%
+  Condition: urticaria, Top-3 Sensitivity: 100.00%
+
+
+=== STRATIFIED TOP-5 SENSITIVITY ===
+Skin Tone: 1.0
+  Condition: acne, Top-5 Sensitivity: 92.86%
+  Condition: bcc, Top-5 Sensitivity: 83.33%
+  Condition: eczema, Top-5 Sensitivity: 89.47%
+  Condition: melanocytic nevus, Top-5 Sensitivity: 95.83%
+  Condition: melanoma, Top-5 Sensitivity: 100.00%
+  Condition: psoriasis, Top-5 Sensitivity: 100.00%
+  Condition: scc, Top-5 Sensitivity: 100.00%
+  Condition: urticaria, Top-5 Sensitivity: 100.00%
+
+Skin Tone: 2.0
+  Condition: acne, Top-5 Sensitivity: 100.00%
+  Condition: bcc, Top-5 Sensitivity: 100.00%
+  Condition: eczema, Top-5 Sensitivity: 97.37%
+  Condition: melanocytic nevus, Top-5 Sensitivity: 95.45%
+  Condition: melanoma, Top-5 Sensitivity: 96.00%
+  Condition: psoriasis, Top-5 Sensitivity: 100.00%
+  Condition: scc, Top-5 Sensitivity: 0.00%
+  Condition: urticaria, Top-5 Sensitivity: 88.24%
+
+Skin Tone: 3.0
+  Condition: acne, Top-5 Sensitivity: 100.00%
+  Condition: eczema, Top-5 Sensitivity: 95.65%
+  Condition: melanocytic nevus, Top-5 Sensitivity: 100.00%
+  Condition: melanoma, Top-5 Sensitivity: 100.00%
+  Condition: psoriasis, Top-5 Sensitivity: 100.00%
+  Condition: urticaria, Top-5 Sensitivity: 93.75%
+
+Skin Tone: 4.0
+  Condition: acne, Top-5 Sensitivity: 100.00%
+  Condition: eczema, Top-5 Sensitivity: 100.00%
+  Condition: melanocytic nevus, Top-5 Sensitivity: 92.31%
+  Condition: melanoma, Top-5 Sensitivity: 100.00%
+  Condition: psoriasis, Top-5 Sensitivity: 100.00%
+  Condition: urticaria, Top-5 Sensitivity: 100.00%
+
+Skin Tone: 5.0
+  Condition: acne, Top-5 Sensitivity: 100.00%
+  Condition: eczema, Top-5 Sensitivity: 100.00%
+  Condition: melanocytic nevus, Top-5 Sensitivity: 100.00%
+  Condition: melanoma, Top-5 Sensitivity: 100.00%
+  Condition: psoriasis, Top-5 Sensitivity: 100.00%
+  Condition: urticaria, Top-5 Sensitivity: 100.00%
+
+Skin Tone: 6.0
+  Condition: acne, Top-5 Sensitivity: 100.00%
+  Condition: eczema, Top-5 Sensitivity: 100.00%
+  Condition: melanoma, Top-5 Sensitivity: 100.00%
+  Condition: psoriasis, Top-5 Sensitivity: 100.00%
+  Condition: urticaria, Top-5 Sensitivity: 100.00%
+
+
+Number of misclassified samples: 142
+
+=== MOST COMMON MISCLASSIFICATIONS (OVERALL) ===
+  melanoma → melanocytic nevus: 14 times
+  psoriasis → eczema: 13 times
+  urticaria → eczema: 13 times
+  eczema → psoriasis: 11 times
+  eczema → urticaria: 11 times
+
+=== MOST COMMON MISCLASSIFICATIONS BY SKIN TONE ===
+
+Skin Tone 1.0:
+  melanoma → melanocytic nevus: 7 times
+  psoriasis → eczema: 5 times
+  eczema → urticaria: 4 times
+
+Skin Tone 2.0:
+  urticaria → eczema: 6 times
+  psoriasis → eczema: 4 times
+  melanocytic nevus → melanoma: 3 times
+
+Skin Tone 3.0:
+  urticaria → eczema: 3 times
+  urticaria → psoriasis: 3 times
+  melanoma → melanocytic nevus: 2 times
+
+Skin Tone 5.0:
+  urticaria → eczema: 1 times
+  psoriasis → eczema: 1 times
+  eczema → acne: 1 times
+
+Skin Tone 4.0:
+  eczema → psoriasis: 5 times
+  eczema → urticaria: 4 times
+  psoriasis → eczema: 3 times
+
+Skin Tone 6.0:
+  eczema → melanocytic nevus: 2 times
+  eczema → psoriasis: 2 times
+  psoriasis → acne: 1 times
+Train Dataset Visualisation: Logs/Train_dataset_20250703_085141.png
+Test Dataset Visualisation: Logs/Test_dataset_20250703_085141.png
+GradCAM Plot Path: Logs/gradCAM_20250703_085141.png
+
+

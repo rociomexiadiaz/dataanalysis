@@ -1,0 +1,117 @@
+--Dermie--
+Diagnosis
+psoriasis            112
+melanoma              96
+melanocytic nevus     73
+eczema                63
+acne                  56
+scc                   41
+bcc                   38
+urticaria             22
+Name: count, dtype: int64
+Diagnosis
+psoriasis            29
+melanoma             24
+melanocytic nevus    19
+eczema               16
+acne                 14
+scc                  11
+bcc                  10
+urticaria             6
+Name: count, dtype: int64
+Diagnosis
+psoriasis            19
+melanoma             17
+melanocytic nevus    12
+eczema               11
+acne                 10
+scc                   7
+bcc                   7
+urticaria             4
+Name: count, dtype: int64
+
+
+--fitz--
+Diagnosis
+psoriasis            472
+melanoma             381
+melanocytic nevus    378
+acne                 361
+eczema               196
+urticaria            183
+Name: count, dtype: int64
+Diagnosis
+psoriasis            121
+melanocytic nevus     98
+melanoma              98
+acne                  93
+eczema                50
+urticaria             47
+Name: count, dtype: int64
+Diagnosis
+psoriasis            81
+melanocytic nevus    65
+melanoma             65
+acne                 62
+eczema               34
+urticaria            31
+Name: count, dtype: int64
+
+
+--PAD--
+Diagnosis
+bcc                  591
+scc                  134
+melanocytic nevus     53
+melanoma              36
+Name: count, dtype: int64
+Diagnosis
+bcc                  152
+scc                   35
+melanocytic nevus     13
+melanoma              10
+Name: count, dtype: int64
+Diagnosis
+bcc                  102
+scc                   23
+melanocytic nevus      9
+melanoma               6
+Name: count, dtype: int64
+
+
+--scin--
+Diagnosis
+eczema               446
+urticaria            121
+psoriasis             62
+acne                  39
+melanocytic nevus     10
+melanoma               4
+Name: count, dtype: int64
+Diagnosis
+eczema               112
+urticaria             30
+psoriasis             18
+acne                  12
+melanocytic nevus      2
+melanoma               1
+Name: count, dtype: int64
+Diagnosis
+eczema               80
+urticaria            22
+psoriasis             9
+acne                  5
+melanocytic nevus     2
+Name: count, dtype: int64
+
+
+--India--
+Diagnosis
+acne    2853
+Name: count, dtype: int64
+Diagnosis
+acne    733
+Name: count, dtype: int64
+Diagnosis
+acne    490
+Name: count, dtype: int64

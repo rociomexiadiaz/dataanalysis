@@ -67,69 +67,15 @@ def is_high_risk_pair(true_class, pred_class, high_risk_pairs):
             return True
     return False
 
-def calculate_risk_scores(misclassifications_by_tone):
-    """Calculate comprehensive risk score for each model"""
-    risk_scores = {}
-    
-    for model in misclassifications_by_tone['Model'].unique():
-        model_data = misclassifications_by_tone[misclassifications_by_tone['Model'] == model]
-        
-        total_misclass = model_data['Count'].sum()
-        high_risk_count = model_data[model_data['High_Risk'] == True]['Count'].sum()
-        high_risk_ratio = high_risk_count / total_misclass if total_misclass > 0 else 0
-        
-        # Weight by severity and frequency
-        risk_scores[model] = high_risk_ratio * (1 + np.log(total_misclass + 1))
-    
-    return pd.Series(risk_scores)
-
-def get_high_risk_distribution(misclassifications_by_tone):
-    """Get distribution of high-risk misclassifications across models"""
-    high_risk_data = misclassifications_by_tone[
-        (misclassifications_by_tone['High_Risk'] == True) &
-        (misclassifications_by_tone['Skin Tone'] == 'All')
-    ]
-    return high_risk_data.groupby('Model')['Count'].sum()
-
-def get_skin_tone_vulnerability(misclassifications_by_tone):
-    """Calculate average high-risk percentage by skin tone across all models"""
-    skin_tone_data = misclassifications_by_tone[misclassifications_by_tone['Skin Tone'] != 'All']
-    
-    vulnerability = {}
-    for skin_tone in skin_tone_data['Skin Tone'].unique():
-        try:
-            skin_tone_int = int(skin_tone)
-            tone_data = skin_tone_data[skin_tone_data['Skin Tone'] == skin_tone]
-            total_count = tone_data['Count'].sum()
-            high_risk_count = tone_data[tone_data['High_Risk'] == True]['Count'].sum()
-            vulnerability[skin_tone_int] = (high_risk_count / total_count * 100) if total_count > 0 else 0
-        except ValueError:
-            continue
-    
-    return pd.Series(vulnerability).sort_index()
-
-def create_model_comparison_matrix(misclassifications_by_tone):
-    """Create a comparison matrix showing relative risk differences between models"""
-    models = misclassifications_by_tone['Model'].unique()
-    n_models = len(models)
-    matrix = np.zeros((n_models, n_models))
-    
-    # Calculate risk scores for each model
-    risk_scores = calculate_risk_scores(misclassifications_by_tone)
-    
-    for i, model1 in enumerate(models):
-        for j, model2 in enumerate(models):
-            if i != j:
-                matrix[i][j] = risk_scores.get(model1, 0) - risk_scores.get(model2, 0)
-    
-    return matrix
-
 def create_overall_misclassifications_chart(misclassifications_by_tone, output_directory):
     """Create overall misclassifications chart by model"""
     print("\n=== Creating Overall Misclassifications Chart ===")
     
+    # Filter data for 'All' skin tone to avoid double counting
+    all_tone_data = misclassifications_by_tone[misclassifications_by_tone['Skin Tone'] == 'All']
+    
     # Total misclassifications by model (from detailed data)
-    total_misclass = misclassifications_by_tone.groupby('Model')['Count'].sum().reset_index()
+    total_misclass = all_tone_data.groupby('Model')['Count'].sum().reset_index()
     total_misclass.columns = ['Model', 'Total_Misclassifications']
     
     # Clean model names and exclude FairDisCo
@@ -218,9 +164,9 @@ def create_high_low_risk_barchart(misclassifications_by_tone, output_directory):
     plt.close()
     print("✓ Saved: high_low_risk_by_model.png")
 
-def create_skin_tone_model_heatmap(misclassifications_by_tone, output_directory):
-    """Create heatmap with skin tones on y-axis, models on x-axis, colored by misclassification count"""
-    print("\n=== Creating Skin Tone vs Model Heatmap ===")
+def create_total_misclassifications_heatmap(misclassifications_by_tone, output_directory):
+    """Create heatmap with skin tones on y-axis, models on x-axis, colored by TOTAL misclassification count"""
+    print("\n=== Creating Total Misclassifications Heatmap ===")
     
     # Filter out 'All' skin tone data as we want specific skin tones
     skin_tone_data = misclassifications_by_tone[misclassifications_by_tone['Skin Tone'] != 'All']
@@ -229,7 +175,7 @@ def create_skin_tone_model_heatmap(misclassifications_by_tone, output_directory)
         print("No skin tone specific data found, skipping this visualization")
         return
     
-    # Sum misclassifications by skin tone and model
+    # Sum ALL misclassifications by skin tone and model
     heatmap_data = skin_tone_data.groupby(['Skin Tone', 'Model'])['Count'].sum().reset_index()
     
     # Clean model names and exclude FairDisCo
@@ -258,201 +204,80 @@ def create_skin_tone_model_heatmap(misclassifications_by_tone, output_directory)
     sns.heatmap(heatmap_pivot, 
                 annot=True, 
                 fmt='.0f', 
-                cmap='YlOrRd',
-                cbar_kws={'label': 'Misclassification Count'},
+                cmap='Blues',
+                cbar_kws={'label': 'Total Misclassification Count'},
                 linewidths=0.5)
     
-    plt.title('Misclassifications by Skin Tone and Model', fontweight='bold', pad=20)
+    plt.title('Total Misclassifications by Skin Tone and Model', fontweight='bold', pad=20)
     plt.xlabel('Model')
     plt.ylabel('Skin Tone (Fitzpatrick Scale)')
     plt.xticks(rotation=45, ha='right')
     plt.yticks(rotation=0)
     
     plt.tight_layout()
-    plt.savefig(os.path.join(output_directory, 'skin_tone_model_heatmap.png'), 
+    plt.savefig(os.path.join(output_directory, 'total_misclassifications_heatmap.png'), 
                 dpi=300, bbox_inches='tight')
     plt.close()
-    print("✓ Saved: skin_tone_model_heatmap.png")
+    print("✓ Saved: total_misclassifications_heatmap.png")
 
-def create_skin_tone_risk_heatmap(misclassifications_by_tone, output_directory):
-    """Create advanced heatmap showing high-risk misclassifications by model and skin tone"""
-    print("\n=== Creating Skin Tone Risk Heatmap ===")
+def create_high_risk_only_heatmap(misclassifications_by_tone, output_directory):
+    """Create heatmap with skin tones on y-axis, models on x-axis, colored by HIGH-RISK misclassification count only"""
+    print("\n=== Creating High-Risk Only Heatmap ===")
     
+    # Filter for high-risk misclassifications only, excluding 'All' skin tone
     high_risk_data = misclassifications_by_tone[
         (misclassifications_by_tone['High_Risk'] == True) &
         (misclassifications_by_tone['Skin Tone'] != 'All')
     ]
     
     if len(high_risk_data) == 0:
-        print("No skin tone high-risk data found, skipping this visualization")
+        print("No high-risk skin tone data found, skipping this visualization")
         return
     
+    # Sum high-risk misclassifications by skin tone and model
+    heatmap_data = high_risk_data.groupby(['Skin Tone', 'Model'])['Count'].sum().reset_index()
+    
+    # Clean model names and exclude FairDisCo
+    heatmap_data['Model'] = heatmap_data['Model'].str.replace('train_', '')
+    heatmap_data = heatmap_data[heatmap_data['Model'] != 'FairDisCo']
+    
     # Create pivot table
-    skin_tone_pivot = high_risk_data.pivot_table(
-        values='Count', index='Model', columns='Skin Tone', fill_value=0
+    heatmap_pivot = heatmap_data.pivot_table(
+        values='Count', 
+        index='Skin Tone', 
+        columns='Model', 
+        fill_value=0
     )
     
-    # Clean model names
-    skin_tone_pivot.index = skin_tone_pivot.index.str.replace('train_', '')
+    # Sort skin tones numerically if they're numeric
+    try:
+        heatmap_pivot.index = heatmap_pivot.index.astype(int)
+        heatmap_pivot = heatmap_pivot.sort_index()
+        heatmap_pivot.index = heatmap_pivot.index.astype(str)
+    except:
+        pass  # Keep original order if not numeric
     
-    # Calculate risk intensity (high-risk as % of total misclassifications per model-skin tone)
-    all_data = misclassifications_by_tone[misclassifications_by_tone['Skin Tone'] != 'All']
-    total_pivot = all_data.pivot_table(
-        values='Count', index='Model', columns='Skin Tone', fill_value=0
-    )
-    total_pivot.index = total_pivot.index.str.replace('train_', '')
+    plt.figure(figsize=(10, 8))
     
-    intensity_pivot = (skin_tone_pivot / total_pivot * 100).fillna(0)
+    # Create heatmap
+    sns.heatmap(heatmap_pivot, 
+                annot=True, 
+                fmt='.0f', 
+                cmap='Reds',
+                cbar_kws={'label': 'High-Risk Misclassification Count'},
+                linewidths=0.5)
     
-    # Create dual heatmap
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
-    
-    # Count heatmap
-    sns.heatmap(skin_tone_pivot, annot=True, fmt='.0f', cmap='Reds', 
-                ax=ax1, cbar_kws={'label': 'Count'})
-    ax1.set_title('High-Risk Misclassifications Count', fontweight='bold')
-    ax1.set_ylabel('Model')
-    ax1.set_xlabel('Skin Tone (Fitzpatrick Scale)')
-    
-    # Intensity heatmap
-    sns.heatmap(intensity_pivot, annot=True, fmt='.1f', cmap='YlOrRd', 
-                ax=ax2, cbar_kws={'label': 'Percentage (%)'})
-    ax2.set_title('High-Risk Misclassifications Intensity', fontweight='bold')
-    ax2.set_ylabel('')
-    ax2.set_xlabel('Skin Tone (Fitzpatrick Scale)')
+    plt.title('High-Risk Misclassifications by Skin Tone and Model', fontweight='bold', pad=20)
+    plt.xlabel('Model')
+    plt.ylabel('Skin Tone (Fitzpatrick Scale)')
+    plt.xticks(rotation=45, ha='right')
+    plt.yticks(rotation=0)
     
     plt.tight_layout()
-    plt.savefig(os.path.join(output_directory, 'skin_tone_risk_heatmap_dual.png'), 
+    plt.savefig(os.path.join(output_directory, 'high_risk_only_heatmap.png'), 
                 dpi=300, bbox_inches='tight')
     plt.close()
-    print("✓ Saved: skin_tone_risk_heatmap_dual.png")
-
-def create_risk_vs_performance_bubble(misclassifications_by_tone, output_directory):
-    """Create bubble chart showing risk vs performance trade-off"""
-    print("\n=== Creating Risk vs Performance Bubble Chart ===")
-    
-    # Calculate metrics for each model
-    model_metrics = []
-    for model in misclassifications_by_tone['Model'].unique():
-        model_data = misclassifications_by_tone[misclassifications_by_tone['Model'] == model]
-        
-        total_misclass = model_data['Count'].sum()
-        high_risk_count = model_data[model_data['High_Risk'] == True]['Count'].sum()
-        high_risk_pct = (high_risk_count / total_misclass * 100) if total_misclass > 0 else 0
-        
-        # Calculate skin tone bias (std dev of high-risk across skin tones)
-        skin_tone_data = model_data[
-            (model_data['High_Risk'] == True) & (model_data['Skin Tone'] != 'All')
-        ]
-        if len(skin_tone_data) > 0:
-            skin_tone_bias = skin_tone_data.groupby('Skin Tone')['Count'].sum().std()
-        else:
-            skin_tone_bias = 0
-        
-        model_metrics.append({
-            'Model': model.replace('train_', ''),
-            'Total_Misclassifications': total_misclass,
-            'High_Risk_Percentage': high_risk_pct,
-            'Skin_Tone_Bias': skin_tone_bias if pd.notna(skin_tone_bias) else 0
-        })
-    
-    df_metrics = pd.DataFrame(model_metrics)
-    
-    plt.figure(figsize=(12, 8))
-    
-    # Create bubble chart
-    scatter = plt.scatter(df_metrics['Total_Misclassifications'], 
-                         df_metrics['High_Risk_Percentage'],
-                         s=df_metrics['Skin_Tone_Bias'] * 50 + 100,  # Min size of 100
-                         c=range(len(df_metrics)), cmap='viridis', alpha=0.7)
-    
-    # Add model labels
-    for i, row in df_metrics.iterrows():
-        plt.annotate(row['Model'], 
-                    (row['Total_Misclassifications'], row['High_Risk_Percentage']),
-                    xytext=(5, 5), textcoords='offset points', fontweight='bold')
-    
-    plt.xlabel('Total Misclassifications')
-    plt.ylabel('High-Risk Percentage (%)')
-    plt.title('Model Risk vs Performance Trade-off\n(Bubble size = Skin Tone Bias)')
-    plt.grid(True, alpha=0.3)
-    
-    plt.tight_layout()
-    plt.savefig(os.path.join(output_directory, 'risk_vs_performance_bubble.png'), 
-                dpi=300, bbox_inches='tight')
-    plt.close()
-    print("✓ Saved: risk_vs_performance_bubble.png")
-
-def create_risk_dashboard(misclassifications_by_tone, output_directory):
-    """Create comprehensive risk dashboard for all models"""
-    print("\n=== Creating Risk Dashboard ===")
-    
-    fig = plt.figure(figsize=(16, 12))
-    gs = fig.add_gridspec(3, 3, height_ratios=[1, 1, 1], width_ratios=[1, 1, 1])
-    
-    # 1. Risk Score (top-left)
-    ax1 = fig.add_subplot(gs[0, 0])
-    risk_scores = calculate_risk_scores(misclassifications_by_tone)
-    risk_scores.index = risk_scores.index.str.replace('train_', '')
-    bars = ax1.bar(risk_scores.index, risk_scores.values, color='red', alpha=0.7)
-    ax1.set_title('Risk Score by Model', fontweight='bold')
-    ax1.set_ylabel('Risk Score')
-    ax1.tick_params(axis='x', rotation=45)
-    
-    # Add value labels
-    for i, v in enumerate(risk_scores.values):
-        ax1.text(i, v + max(risk_scores.values) * 0.02, f'{v:.2f}', 
-                ha='center', va='bottom', fontweight='bold')
-    
-    # 2. High-Risk Distribution (top-middle)
-    ax2 = fig.add_subplot(gs[0, 1])
-    high_risk_dist = get_high_risk_distribution(misclassifications_by_tone)
-    if len(high_risk_dist) > 0:
-        high_risk_dist.index = high_risk_dist.index.str.replace('train_', '')
-        wedges, texts, autotexts = ax2.pie(high_risk_dist.values, labels=high_risk_dist.index, 
-                                          autopct='%1.1f%%', startangle=90)
-        ax2.set_title('High-Risk Distribution', fontweight='bold')
-    else:
-        ax2.text(0.5, 0.5, 'No high-risk data', ha='center', va='center', transform=ax2.transAxes)
-        ax2.set_title('High-Risk Distribution', fontweight='bold')
-    
-    # 3. Skin Tone Vulnerability (top-right)
-    ax3 = fig.add_subplot(gs[0, 2])
-    skin_vulnerability = get_skin_tone_vulnerability(misclassifications_by_tone)
-    if len(skin_vulnerability) > 0:
-        colors = ['#F5D5A0', '#E4B589', '#D1A479', '#C0874F', '#A56635', '#4C2C27']
-        available_colors = colors[:len(skin_vulnerability)]
-        ax3.bar(range(len(skin_vulnerability)), skin_vulnerability.values, 
-                color=available_colors)
-        ax3.set_title('Skin Tone Vulnerability', fontweight='bold')
-        ax3.set_xticks(range(len(skin_vulnerability)))
-        ax3.set_xticklabels([f'FST {i}' for i in skin_vulnerability.index])
-        ax3.set_ylabel('Avg High-Risk %')
-    else:
-        ax3.text(0.5, 0.5, 'No skin tone data', ha='center', va='center', transform=ax3.transAxes)
-        ax3.set_title('Skin Tone Vulnerability', fontweight='bold')
-    
-    # 4. Model Comparison Matrix (bottom span)
-    ax4 = fig.add_subplot(gs[1:, :])
-    comparison_matrix = create_model_comparison_matrix(misclassifications_by_tone)
-    models = [m.replace('train_', '') for m in misclassifications_by_tone['Model'].unique()]
-    
-    im = ax4.imshow(comparison_matrix, cmap='RdYlBu_r', aspect='auto')
-    ax4.set_title('Model Risk Comparison Matrix', fontweight='bold', pad=20)
-    ax4.set_xticks(range(len(models)))
-    ax4.set_yticks(range(len(models)))
-    ax4.set_xticklabels(models, rotation=45)
-    ax4.set_yticklabels(models)
-    
-    # Add colorbar
-    cbar = plt.colorbar(im, ax=ax4, orientation='horizontal', pad=0.1)
-    cbar.set_label('Risk Difference Score')
-    
-    plt.tight_layout()
-    plt.savefig(os.path.join(output_directory, 'risk_dashboard.png'), 
-                dpi=300, bbox_inches='tight')
-    plt.close()
-    print("✓ Saved: risk_dashboard.png")
+    print("✓ Saved: high_risk_only_heatmap.png")
 
 # Load data from the "All Datasets" configuration
 log_path = os.path.join(log_directory, 'combined_all.txt')
@@ -489,23 +314,27 @@ misclassifications_by_tone['Misclassification_Pair'] = (
 
 print(f"Identified {misclassifications_by_tone['High_Risk'].sum()} high-risk misclassifications out of {len(misclassifications_by_tone)} total")
 
-# Create the 3 visualizations you want
+# Create the 4 visualizations
 print("\n=== Creating Visualizations ===")
 
-# 1. Overall misclassifications (your preferred format, without FairDisCo)
+# 1. Overall misclassifications bar chart (excludes FairDisCo)
 create_overall_misclassifications_chart(misclassifications_by_tone, output_directory)
 
-# 2. High-risk vs low-risk bar chart (2 bars per model)
+# 2. High-risk vs low-risk bar chart (2 bars per model, excludes FairDisCo)
 create_high_low_risk_barchart(misclassifications_by_tone, output_directory)
 
-# 3. Skin tone vs model heatmap
-create_skin_tone_model_heatmap(misclassifications_by_tone, output_directory)
+# 3. Total misclassifications heatmap (skin tone vs model, excludes FairDisCo)
+create_total_misclassifications_heatmap(misclassifications_by_tone, output_directory)
 
-# Original analysis and summary statistics
+# 4. High-risk only heatmap (skin tone vs model, excludes FairDisCo)
+create_high_risk_only_heatmap(misclassifications_by_tone, output_directory)
+
+# Summary statistics
 print("\n=== Summary Statistics ===")
 
 # Total misclassifications by model
-total_misclass = misclassifications_by_tone.groupby('Model')['Count'].sum().reset_index()
+all_tone_data = misclassifications_by_tone[misclassifications_by_tone['Skin Tone'] == 'All']
+total_misclass = all_tone_data.groupby('Model')['Count'].sum().reset_index()
 total_misclass.columns = ['Model', 'Total_Misclassifications']
 
 print("Detailed Misclassification Counts by Model:")

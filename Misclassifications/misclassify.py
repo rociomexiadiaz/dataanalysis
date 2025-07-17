@@ -67,326 +67,308 @@ def is_high_risk_pair(true_class, pred_class, high_risk_pairs):
             return True
     return False
 
-# Define dataset combinations to analyze
-dataset_combinations = [
-    'combined_all.txt',
-    'combined_minus_dermie.txt',
-    'combined_minus_fitz.txt',
-    'combined_minus_india.txt',
-    'combined_minus_pad.txt',
-    'combined_minus_scin.txt'
-]
-
-# Define baseline model name
-BASELINE_MODEL = "train_Baseline"
-
-# Load data from all dataset combinations
-all_data = {}
-baseline_data = {}
-
-print("Loading misclassification data from all dataset combinations...")
-
-for combination in dataset_combinations:
-    log_path = os.path.join(log_directory, combination)
+def create_overall_misclassifications_chart(misclassifications_by_tone, output_directory):
+    """Create overall misclassifications chart by model"""
+    print("\n=== Creating Overall Misclassifications Chart ===")
     
-    if os.path.exists(log_path):
-        print(f"Processing {combination}...")
-        df_dict = parse_combined_log(log_path)
-        
-        dataset_name = combination.replace('combined_', '').replace('.txt', '')
-        all_data[dataset_name] = df_dict
-        
-        # Extract baseline model data specifically
-        misclassifications_by_tone = df_dict['MisclassificationDetails']
-        baseline_misclass = misclassifications_by_tone[
-            misclassifications_by_tone['Model'] == BASELINE_MODEL
-        ]
-        
-        if len(baseline_misclass) > 0:
-            baseline_data[dataset_name] = baseline_misclass
-            print(f"  Found {len(baseline_misclass)} baseline misclassifications for {dataset_name}")
-    else:
-        print(f"Warning: {combination} not found, skipping...")
-
-# Process baseline data for all dataset combinations
-processed_baseline_data = {}
-
-for dataset_name, data in baseline_data.items():
-    data = data.copy()  # Make a copy to avoid modifying original
-    # Add high-risk indicator
-    data['High_Risk'] = data.apply(
-        lambda row: is_high_risk_pair(row['True Class'], row['Predicted Class'], high_risk_pairs), 
-        axis=1
-    )
+    # Filter data for 'All' skin tone to avoid double counting
+    all_tone_data = misclassifications_by_tone[misclassifications_by_tone['Skin Tone'] == 'All']
     
-    # Create misclassification pair labels
-    data['Misclassification_Pair'] = (
-        data['True Class'] + ' → ' + data['Predicted Class']
-    )
-    
-    # Add dataset name to the data
-    data['Dataset'] = dataset_name
-    
-    processed_baseline_data[dataset_name] = data
-
-# ========== REQUIRED VISUALIZATIONS ==========
-
-# 1. Total detailed misclassifications by model (using 'all' dataset)
-if 'all' in all_data:
-    print("\n=== Creating total_detailed_misclassifications_by_model.png ===")
-    df_dict = all_data['all']
-    misclassifications_by_tone = df_dict['MisclassificationDetails']
-    
-    # Add high-risk indicator
-    misclassifications_by_tone['High_Risk'] = misclassifications_by_tone.apply(
-        lambda row: is_high_risk_pair(row['True Class'], row['Predicted Class'], high_risk_pairs), 
-        axis=1
-    )
-    
-    # Create misclassification pair labels
-    misclassifications_by_tone['Misclassification_Pair'] = (
-        misclassifications_by_tone['True Class'] + ' → ' + misclassifications_by_tone['Predicted Class']
-    )
-    
-    # Total misclassifications by model
-    total_misclass = misclassifications_by_tone.groupby('Model')['Count'].sum().reset_index()
+    # Total misclassifications by model (from detailed data)
+    total_misclass = all_tone_data.groupby('Model')['Count'].sum().reset_index()
     total_misclass.columns = ['Model', 'Total_Misclassifications']
     
+    # Clean model names and exclude FairDisCo
+    total_misclass['Model'] = total_misclass['Model'].replace({
+        'train_Baseline': 'Baseline',
+        'train_VAE': 'VAE',
+        'train_TABE': 'TABE',
+        'train_FairDisCo': 'FairDisCo'
+    })
+    
+    # Filter out FairDisCo
+    total_misclass = total_misclass[total_misclass['Model'] != 'FairDisCo']
+    
     plt.figure(figsize=(12, 6))
-    bars = plt.bar(total_misclass['Model'], total_misclass['Total_Misclassifications'])
+    bars = plt.bar(total_misclass['Model'], total_misclass['Total_Misclassifications'],
+                   alpha=0.8, color='steelblue')
     plt.xlabel('Model')
-    plt.ylabel('Total Detailed Misclassifications')
-    plt.title('Total Detailed Misclassifications by Model')
+    plt.ylabel('Total Misclassifications')
+    plt.title('Overall Number of Misclassifications per Model')
     plt.xticks(rotation=45, ha='right')
-    plt.grid(True, alpha=0.3)
+    plt.grid(True, alpha=0.3, axis='y')
     
     # Add value labels on bars
     for i, v in enumerate(total_misclass['Total_Misclassifications']):
-        plt.text(i, v + max(total_misclass['Total_Misclassifications']) * 0.01, str(v), 
-                 ha='center', va='bottom')
+        plt.text(i, v + max(total_misclass['Total_Misclassifications']) * 0.01, str(v),
+                 ha='center', va='bottom', fontweight='bold')
     
     plt.tight_layout()
-    plt.savefig(os.path.join(output_directory, 'total_detailed_misclassifications_by_model.png'), dpi=300, bbox_inches='tight')
+    plt.savefig(os.path.join(output_directory, 'overall_misclassifications_by_model.png'),
+                dpi=300, bbox_inches='tight')
     plt.close()
-    print("✓ Saved: total_detailed_misclassifications_by_model.png")
+    print("✓ Saved: overall_misclassifications_by_model.png")
 
-    # 2. Top misclassification pairs by specific models
-    target_models = ['train_Baseline', 'train_VAE', 'train_TABE', 'train_FairDisCo']
-    n_top_pairs = 15
+def create_high_low_risk_barchart(misclassifications_by_tone, output_directory):
+    """Create bar chart showing high-risk vs low-risk misclassifications per model"""
+    print("\n=== Creating High-Risk vs Low-Risk Bar Chart ===")
     
-    for model in target_models:
-        model_data = misclassifications_by_tone[
-            (misclassifications_by_tone['Model'] == model) & 
-            (misclassifications_by_tone['Skin Tone'] == 'All')
-        ]
-        
-        if len(model_data) > 0:
-            # Get top misclassification pairs
-            top_pairs = model_data.nlargest(n_top_pairs, 'Count')
-            
-            plt.figure(figsize=(14, 10))
-            colors = ['red' if risk else 'steelblue' for risk in top_pairs['High_Risk']]
-            
-            y_pos = range(len(top_pairs))
-            bars = plt.barh(y_pos, top_pairs['Count'], color=colors, alpha=0.8)
-            plt.yticks(y_pos, top_pairs['Misclassification_Pair'])
-            plt.xlabel('Number of Misclassifications')
-            plt.title(f'Top {min(n_top_pairs, len(top_pairs))} Misclassification Pairs - {model}')
-            plt.gca().invert_yaxis()
-            
-            # Add value labels
-            for i, v in enumerate(top_pairs['Count']):
-                plt.text(v + max(top_pairs['Count']) * 0.01, i, str(v), 
-                         va='center', ha='left')
-            
-            # Add legend
-            from matplotlib.patches import Patch
-            legend_elements = [Patch(facecolor='red', alpha=0.8, label='High-Risk'),
-                              Patch(facecolor='steelblue', alpha=0.8, label='Regular')]
-            plt.legend(handles=legend_elements, loc='lower right')
-            
-            plt.tight_layout()
-            safe_model_name = model.replace('/', '_').replace('\\', '_').replace(':', '_')
-            plt.savefig(os.path.join(output_directory, f'top_misclassifications_{safe_model_name}.png'), 
-                       dpi=300, bbox_inches='tight')
-            plt.close()
-            
-            print(f"✓ Saved: top_misclassifications_{safe_model_name}.png")
-
-# 3. Baseline top pairs for different datasets
-if processed_baseline_data:
-    print("\n=== Creating baseline top pairs for different datasets ===")
-    n_top_pairs = 10
+    # Filter data for 'All' skin tone to avoid double counting
+    all_tone_data = misclassifications_by_tone[misclassifications_by_tone['Skin Tone'] == 'All']
     
-    for dataset_name in processed_baseline_data.keys():
-        dataset_data = processed_baseline_data[dataset_name]
-        all_data_subset = dataset_data[dataset_data['Skin Tone'] == 'All']
-        
-        if len(all_data_subset) > 0:
-            top_pairs = all_data_subset.nlargest(n_top_pairs, 'Count')
-            
-            plt.figure(figsize=(14, 10))
-            colors = ['red' if risk else 'steelblue' for risk in top_pairs['High_Risk']]
-            
-            y_pos = range(len(top_pairs))
-            bars = plt.barh(y_pos, top_pairs['Count'], color=colors, alpha=0.8)
-            plt.yticks(y_pos, top_pairs['Misclassification_Pair'])
-            plt.xlabel('Number of Misclassifications')
-            plt.title(f'Top {min(n_top_pairs, len(top_pairs))} Misclassification Pairs - {BASELINE_MODEL} ({dataset_name})')
-            plt.gca().invert_yaxis()
-            
-            # Add value labels
-            for i, v in enumerate(top_pairs['Count']):
-                plt.text(v + max(top_pairs['Count']) * 0.01, i, str(v), 
-                         va='center', ha='left')
-            
-            # Add legend
-            from matplotlib.patches import Patch
-            legend_elements = [Patch(facecolor='red', alpha=0.8, label='High-Risk'),
-                              Patch(facecolor='steelblue', alpha=0.8, label='Regular')]
-            plt.legend(handles=legend_elements, loc='lower right')
-            
-            plt.tight_layout()
-            plt.savefig(os.path.join(output_directory, f'baseline_top_pairs_{dataset_name}.png'), 
-                       dpi=300, bbox_inches='tight')
-            plt.close()
-            print(f"✓ Saved: baseline_top_pairs_{dataset_name}.png")
+    # Calculate high-risk and low-risk counts
+    risk_summary = all_tone_data.groupby(['Model', 'High_Risk'])['Count'].sum().reset_index()
+    risk_pivot = risk_summary.pivot_table(values='Count', index='Model', columns='High_Risk', fill_value=0)
+    
+    # Clean model names and exclude FairDisCo
+    risk_pivot.index = risk_pivot.index.str.replace('train_', '')
+    risk_pivot = risk_pivot[risk_pivot.index != 'FairDisCo']
+    
+    # Ensure we have both True and False columns
+    if True not in risk_pivot.columns:
+        risk_pivot[True] = 0
+    if False not in risk_pivot.columns:
+        risk_pivot[False] = 0
+    
+    plt.figure(figsize=(12, 6))
+    
+    x = np.arange(len(risk_pivot.index))
+    width = 0.35
+    
+    bars1 = plt.bar(x - width/2, risk_pivot[False], width, 
+                   label='Low-Risk Misclassifications', color='lightblue', alpha=0.8)
+    bars2 = plt.bar(x + width/2, risk_pivot[True], width, 
+                   label='High-Risk Misclassifications', color='red', alpha=0.8)
+    
+    plt.xlabel('Model')
+    plt.ylabel('Number of Misclassifications')
+    plt.title('High-Risk vs Low-Risk Misclassifications by Model')
+    plt.xticks(x, risk_pivot.index, rotation=45, ha='right')
+    plt.legend()
+    plt.grid(True, alpha=0.3, axis='y')
+    
+    # Add value labels on bars
+    for i, v in enumerate(risk_pivot[False]):
+        if v > 0:
+            plt.text(i - width/2, v + max(risk_pivot.values.flatten()) * 0.01, str(v), 
+                     ha='center', va='bottom', fontweight='bold')
+    
+    for i, v in enumerate(risk_pivot[True]):
+        if v > 0:
+            plt.text(i + width/2, v + max(risk_pivot.values.flatten()) * 0.01, str(v), 
+                     ha='center', va='bottom', fontweight='bold')
+    
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_directory, 'high_low_risk_by_model.png'), 
+                dpi=300, bbox_inches='tight')
+    plt.close()
+    print("✓ Saved: high_low_risk_by_model.png")
 
-# 4. High-risk misclassifications by skin tone and model (using 'all' dataset)
-if 'all' in all_data:
-    print("\n=== Creating high-risk misclassifications by skin tone and model ===")
+def create_total_misclassifications_heatmap(misclassifications_by_tone, output_directory):
+    """Create heatmap with skin tones on y-axis, models on x-axis, colored by TOTAL misclassification count"""
+    print("\n=== Creating Total Misclassifications Heatmap ===")
+    
+    # Filter out 'All' skin tone data as we want specific skin tones
+    skin_tone_data = misclassifications_by_tone[misclassifications_by_tone['Skin Tone'] != 'All']
+    
+    if len(skin_tone_data) == 0:
+        print("No skin tone specific data found, skipping this visualization")
+        return
+    
+    # Sum ALL misclassifications by skin tone and model
+    heatmap_data = skin_tone_data.groupby(['Skin Tone', 'Model'])['Count'].sum().reset_index()
+    
+    # Clean model names and exclude FairDisCo
+    heatmap_data['Model'] = heatmap_data['Model'].str.replace('train_', '')
+    heatmap_data = heatmap_data[heatmap_data['Model'] != 'FairDisCo']
+    
+    # Create pivot table
+    heatmap_pivot = heatmap_data.pivot_table(
+        values='Count', 
+        index='Skin Tone', 
+        columns='Model', 
+        fill_value=0
+    )
+    
+    # Sort skin tones numerically if they're numeric
+    try:
+        heatmap_pivot.index = heatmap_pivot.index.astype(int)
+        heatmap_pivot = heatmap_pivot.sort_index()
+        heatmap_pivot.index = heatmap_pivot.index.astype(str)
+    except:
+        pass  # Keep original order if not numeric
+    
+    plt.figure(figsize=(10, 8))
+    
+    # Create heatmap
+    sns.heatmap(heatmap_pivot, 
+                annot=True, 
+                fmt='.0f', 
+                cmap='Blues',
+                cbar_kws={'label': 'Total Misclassification Count'},
+                linewidths=0.5)
+    
+    plt.title('Total Misclassifications by Skin Tone and Model', fontweight='bold', pad=20)
+    plt.xlabel('Model')
+    plt.ylabel('Skin Tone (Fitzpatrick Scale)')
+    plt.xticks(rotation=45, ha='right')
+    plt.yticks(rotation=0)
+    
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_directory, 'total_misclassifications_heatmap.png'), 
+                dpi=300, bbox_inches='tight')
+    plt.close()
+    print("✓ Saved: total_misclassifications_heatmap.png")
+
+def create_high_risk_only_heatmap(misclassifications_by_tone, output_directory):
+    """Create heatmap with skin tones on y-axis, models on x-axis, colored by HIGH-RISK misclassification count only"""
+    print("\n=== Creating High-Risk Only Heatmap ===")
     
     # Filter for high-risk misclassifications only, excluding 'All' skin tone
-    high_risk_skin_tone = misclassifications_by_tone[
+    high_risk_data = misclassifications_by_tone[
         (misclassifications_by_tone['High_Risk'] == True) &
         (misclassifications_by_tone['Skin Tone'] != 'All')
     ]
     
-    if len(high_risk_skin_tone) > 0:
-        # Group by model and skin tone
-        skin_tone_summary = high_risk_skin_tone.groupby(['Model', 'Skin Tone'])['Count'].sum().reset_index()
-        
-        # Create a pivot table
-        skin_tone_pivot = skin_tone_summary.pivot_table(values='Count', index='Model', columns='Skin Tone', fill_value=0)
-        
-        # Define Fitzpatrick skin tone color mapping
-        fst_color_map = {
-            1: '#F5D5A0',
-            2: '#E4B589',
-            3: '#D1A479',
-            4: '#C0874F',
-            5: '#A56635',
-            6: '#4C2C27'
-        }
-        
-        skin_tones = skin_tone_pivot.columns
-        colors = [fst_color_map.get(int(tone), '#888888') for tone in skin_tones]
-        
-        plt.figure(figsize=(14, 8))
-        
-        # Create grouped bar chart
-        x = np.arange(len(skin_tone_pivot.index))
-        width = 0.8 / len(skin_tones)
-        
-        for i, (skin_tone, color) in enumerate(zip(skin_tones, colors)):
-            offset = (i - len(skin_tones)/2 + 0.5) * width
-            bars = plt.bar(x + offset, skin_tone_pivot[skin_tone], width, 
-                          label=f'Skin Tone {skin_tone}', color=color, alpha=0.8)
-            
-            # Add value labels on bars
-            for j, v in enumerate(skin_tone_pivot[skin_tone]):
-                if v > 0:
-                    plt.text(j + offset, v + max(skin_tone_pivot.values.flatten()) * 0.01, str(v), 
-                             ha='center', va='bottom', fontsize=8)
-        
-        plt.xlabel('Model')
-        plt.ylabel('Count')
-        plt.title('High-Risk Misclassifications by Model and Skin Tone')
-        plt.xticks(x, skin_tone_pivot.index, rotation=45, ha='right')
-        plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
-        plt.grid(True, alpha=0.3)
-        
-        plt.tight_layout()
-        plt.savefig(os.path.join(output_directory, 'high_risk_by_model_and_skin_tone.png'), 
-                   dpi=300, bbox_inches='tight')
-        plt.close()
-        print("✓ Saved: high_risk_by_model_and_skin_tone.png")
+    if len(high_risk_data) == 0:
+        print("No high-risk skin tone data found, skipping this visualization")
+        return
+    
+    # Sum high-risk misclassifications by skin tone and model
+    heatmap_data = high_risk_data.groupby(['Skin Tone', 'Model'])['Count'].sum().reset_index()
+    
+    # Clean model names and exclude FairDisCo
+    heatmap_data['Model'] = heatmap_data['Model'].str.replace('train_', '')
+    heatmap_data = heatmap_data[heatmap_data['Model'] != 'FairDisCo']
+    
+    # Create pivot table
+    heatmap_pivot = heatmap_data.pivot_table(
+        values='Count', 
+        index='Skin Tone', 
+        columns='Model', 
+        fill_value=0
+    )
+    
+    # Sort skin tones numerically if they're numeric
+    try:
+        heatmap_pivot.index = heatmap_pivot.index.astype(int)
+        heatmap_pivot = heatmap_pivot.sort_index()
+        heatmap_pivot.index = heatmap_pivot.index.astype(str)
+    except:
+        pass  # Keep original order if not numeric
+    
+    plt.figure(figsize=(10, 8))
+    
+    # Create heatmap
+    sns.heatmap(heatmap_pivot, 
+                annot=True, 
+                fmt='.0f', 
+                cmap='Reds',
+                cbar_kws={'label': 'High-Risk Misclassification Count'},
+                linewidths=0.5)
+    
+    plt.title('High-Risk Misclassifications by Skin Tone and Model', fontweight='bold', pad=20)
+    plt.xlabel('Model')
+    plt.ylabel('Skin Tone (Fitzpatrick Scale)')
+    plt.xticks(rotation=45, ha='right')
+    plt.yticks(rotation=0)
+    
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_directory, 'high_risk_only_heatmap.png'), 
+                dpi=300, bbox_inches='tight')
+    plt.close()
+    print("✓ Saved: high_risk_only_heatmap.png")
 
-# 5. High-risk misclassifications by skin tone and dataset (baseline only)
-if processed_baseline_data:
-    print("\n=== Creating high-risk misclassifications by skin tone and dataset (baseline) ===")
-    
-    # Combine all baseline data
-    combined_baseline_df = pd.concat(processed_baseline_data.values(), ignore_index=True)
-    
-    # Filter for high-risk misclassifications only, excluding 'All' skin tone
-    high_risk_baseline_skin_tone = combined_baseline_df[
-        (combined_baseline_df['High_Risk'] == True) &
-        (combined_baseline_df['Skin Tone'] != 'All')
-    ]
-    
-    if len(high_risk_baseline_skin_tone) > 0:
-        # Group by dataset and skin tone
-        dataset_skin_tone_summary = high_risk_baseline_skin_tone.groupby(['Dataset', 'Skin Tone'])['Count'].sum().reset_index()
-        
-        # Create a pivot table
-        dataset_skin_tone_pivot = dataset_skin_tone_summary.pivot_table(values='Count', index='Dataset', columns='Skin Tone', fill_value=0)
-        
-        # Define Fitzpatrick skin tone color mapping
-        fst_color_map = {
-            1: '#F5D5A0',
-            2: '#E4B589',
-            3: '#D1A479',
-            4: '#C0874F',
-            5: '#A56635',
-            6: '#4C2C27'
-        }
-        
-        skin_tones = dataset_skin_tone_pivot.columns
-        colors = [fst_color_map.get(int(tone), '#888888') for tone in skin_tones]
-        
-        plt.figure(figsize=(14, 8))
-        
-        # Create grouped bar chart
-        x = np.arange(len(dataset_skin_tone_pivot.index))
-        width = 0.8 / len(skin_tones)
-        
-        for i, (skin_tone, color) in enumerate(zip(skin_tones, colors)):
-            offset = (i - len(skin_tones)/2 + 0.5) * width
-            bars = plt.bar(x + offset, dataset_skin_tone_pivot[skin_tone], width, 
-                          label=f'Skin Tone {skin_tone}', color=color, alpha=0.8)
-            
-            # Add value labels on bars
-            for j, v in enumerate(dataset_skin_tone_pivot[skin_tone]):
-                if v > 0:
-                    plt.text(j + offset, v + max(dataset_skin_tone_pivot.values.flatten()) * 0.01, str(v), 
-                             ha='center', va='bottom', fontsize=8)
-        
-        plt.xlabel('Dataset Combination')
-        plt.ylabel('Count')
-        plt.title('High-Risk Misclassifications by Dataset and Skin Tone (Baseline Model)')
-        plt.xticks(x, dataset_skin_tone_pivot.index, rotation=45, ha='right')
-        plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
-        plt.grid(True, alpha=0.3)
-        
-        plt.tight_layout()
-        plt.savefig(os.path.join(output_directory, 'high_risk_by_dataset_and_skin_tone_baseline.png'), 
-                   dpi=300, bbox_inches='tight')
-        plt.close()
-        print("✓ Saved: high_risk_by_dataset_and_skin_tone_baseline.png")
+# Load data from the "All Datasets" configuration
+log_path = os.path.join(log_directory, 'combined_all.txt')
 
-print(f"\nAll required visualizations saved to: {output_directory}")
-print("Files created:")
-print("- total_detailed_misclassifications_by_model.png")
-print("- top_misclassifications_train_Baseline.png")
-print("- top_misclassifications_train_VAE.png") 
-print("- top_misclassifications_train_TABE.png")
-print("- top_misclassifications_train_FairDisCo.png")
-print("- baseline_top_pairs_all.png")
-print("- baseline_top_pairs_minus_dermie.png")
-print("- baseline_top_pairs_minus_fitz.png")
-print("- baseline_top_pairs_minus_india.png")
-print("- baseline_top_pairs_minus_pad.png")
-print("- baseline_top_pairs_minus_scin.png")
-print("- high_risk_by_model_and_skin_tone.png")
-print("- high_risk_by_dataset_and_skin_tone_baseline.png")
+print("Loading misclassification data from combined_all.txt...")
+df_dict = parse_combined_log(log_path)
+
+# Extract misclassification dataframes
+misclassifications_by_tone = df_dict['MisclassificationDetails']
+misclassified_counts = df_dict['MisclassifiedCounts']
+
+print(f"Found detailed misclassification data: {len(misclassifications_by_tone)} records")
+print(f"Found total misclassification counts: {len(misclassified_counts)} models")
+
+if len(misclassifications_by_tone) == 0:
+    print("ERROR: No detailed misclassification data found!")
+    print("Please ensure your dataframe.py has been updated with the fixed parsing code.")
+    exit()
+
+print(f"Models with misclassification data: {misclassifications_by_tone['Model'].unique()}")
+print(f"Sample misclassification data:")
+print(misclassifications_by_tone.head())
+
+# Add high-risk indicator to the data
+misclassifications_by_tone['High_Risk'] = misclassifications_by_tone.apply(
+    lambda row: is_high_risk_pair(row['True Class'], row['Predicted Class'], high_risk_pairs), 
+    axis=1
+)
+
+# Create misclassification pair labels
+misclassifications_by_tone['Misclassification_Pair'] = (
+    misclassifications_by_tone['True Class'] + ' → ' + misclassifications_by_tone['Predicted Class']
+)
+
+print(f"Identified {misclassifications_by_tone['High_Risk'].sum()} high-risk misclassifications out of {len(misclassifications_by_tone)} total")
+
+# Create the 4 visualizations
+print("\n=== Creating Visualizations ===")
+
+# 1. Overall misclassifications bar chart (excludes FairDisCo)
+create_overall_misclassifications_chart(misclassifications_by_tone, output_directory)
+
+# 2. High-risk vs low-risk bar chart (2 bars per model, excludes FairDisCo)
+create_high_low_risk_barchart(misclassifications_by_tone, output_directory)
+
+# 3. Total misclassifications heatmap (skin tone vs model, excludes FairDisCo)
+create_total_misclassifications_heatmap(misclassifications_by_tone, output_directory)
+
+# 4. High-risk only heatmap (skin tone vs model, excludes FairDisCo)
+create_high_risk_only_heatmap(misclassifications_by_tone, output_directory)
+
+# Summary statistics
+print("\n=== Summary Statistics ===")
+
+# Total misclassifications by model
+all_tone_data = misclassifications_by_tone[misclassifications_by_tone['Skin Tone'] == 'All']
+total_misclass = all_tone_data.groupby('Model')['Count'].sum().reset_index()
+total_misclass.columns = ['Model', 'Total_Misclassifications']
+
+print("Detailed Misclassification Counts by Model:")
+for _, row in total_misclass.iterrows():
+    print(f"  {row['Model']}: {row['Total_Misclassifications']} detailed misclassifications")
+
+if misclassifications_by_tone['High_Risk'].sum() > 0:
+    print(f"\nHigh-Risk Misclassification Analysis:")
+    high_risk_by_model = misclassifications_by_tone[
+        (misclassifications_by_tone['High_Risk'] == True) &
+        (misclassifications_by_tone['Skin Tone'] == 'All')
+    ].groupby('Model')['Count'].sum().reset_index()
+    
+    for _, row in high_risk_by_model.iterrows():
+        total_for_model = total_misclass[total_misclass['Model'] == row['Model']]['Total_Misclassifications'].iloc[0]
+        percentage = (row['Count'] / total_for_model) * 100 if total_for_model > 0 else 0
+        print(f"  {row['Model']}: {row['Count']} high-risk ({percentage:.1f}% of detailed)")
+    
+    # Most common high-risk misclassifications
+    print(f"\nMost Common High-Risk Misclassification Pairs:")
+    top_high_risk = misclassifications_by_tone[
+        (misclassifications_by_tone['High_Risk'] == True) &
+        (misclassifications_by_tone['Skin Tone'] == 'All')
+    ].groupby('Misclassification_Pair')['Count'].sum().sort_values(ascending=False).head(10)
+    
+    for pair, count in top_high_risk.items():
+        print(f"  {pair}: {count} cases")
+
+    # Model safety ranking
+    print(f"\nModel Safety Ranking (by high-risk misclassifications, lowest = safest):")
+    if len(high_risk_by_model) > 0:
+        safety_ranking = high_risk_by_model.sort_values('Count')
+        for i, (_, row) in enumerate(safety_ranking.iterrows()):
+            print(f"  {i+1}. {row['Model']}: {row['Count']} high-risk misclassifications")
+
+print(f"\nMisclassification visualizations saved to: {output_directory}")
+print(f"Total files created: {len([f for f in os.listdir(output_directory) if f.endswith('.png')])}")

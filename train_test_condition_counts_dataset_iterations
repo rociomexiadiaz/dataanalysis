@@ -1,0 +1,132 @@
+All
+TRAIN
+Diagnosis
+acne                 3309
+eczema                705
+psoriasis             646
+bcc                   629
+melanoma              517
+melanocytic nevus     514
+urticaria             326
+scc                   175
+TEST
+Diagnosis
+acne                 567
+eczema               125
+bcc                  109
+psoriasis            109
+melanocytic nevus     88
+melanoma              88
+urticaria             57
+scc                   30
+
+Minus Dermie
+TRAIN
+Diagnosis
+acne                 3253
+eczema                642
+bcc                   591
+psoriasis             534
+melanocytic nevus     441
+melanoma              421
+urticaria             304
+scc                   134
+TEST
+Diagnosis
+acne                 557
+eczema               114
+bcc                  102
+psoriasis             90
+melanocytic nevus     76
+melanoma              71
+urticaria             53
+scc                   23
+
+Minus PADUFES
+TRAIN
+Diagnosis
+acne                 3309
+eczema                705
+psoriasis             646
+melanoma              481
+melanocytic nevus     461
+urticaria             326
+scc                    41
+bcc                    38
+TEST
+Diagnosis
+acne                 567
+eczema               125
+psoriasis            109
+melanoma              82
+melanocytic nevus     79
+urticaria             57
+scc                    7
+bcc                    7
+
+Minus SCIN
+TRAIN
+Diagnosis
+acne                 3270
+bcc                   629
+psoriasis             584
+melanoma              513
+melanocytic nevus     504
+eczema                259
+urticaria             205
+scc                   175
+TEST
+Diagnosis
+acne                 562
+bcc                  109
+psoriasis            100
+melanoma              88
+melanocytic nevus     86
+eczema                45
+urticaria             35
+scc                   30
+
+Minus Fitzpatrick17k
+TRAIN
+Diagnosis
+acne                 2948
+bcc                   629
+eczema                509
+scc                   175
+psoriasis             174
+urticaria             143
+melanocytic nevus     136
+melanoma              136
+TEST
+Diagnosis
+acne                 505
+bcc                  109
+eczema                91
+scc                   30
+psoriasis             28
+urticaria             26
+melanocytic nevus     23
+melanoma              23
+
+Minus India
+TRAIN
+Diagnosis
+eczema               705
+psoriasis            646
+bcc                  629
+melanoma             517
+melanocytic nevus    514
+acne                 456
+urticaria            326
+scc                  175
+TEST
+Diagnosis
+eczema               125
+psoriasis            109
+bcc                  109
+melanoma              88
+melanocytic nevus     88
+acne                  77
+urticaria             57
+scc                   30
+

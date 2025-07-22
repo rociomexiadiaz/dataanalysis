@@ -99,6 +99,65 @@ test_condition_counts = {
     'Minus India': 683  # Total test condition samples when india removed
 }
 
+# Define test condition counts stratified by skin tone (based on the provided test set image)
+# These are the actual test set counts for each skin tone per dataset
+test_condition_counts_by_skin_tone = {
+    'All': {
+        # Combined all datasets - actual test set counts
+        1.0: 48 + 18 + 74 + 2 + 11,    # FST I: 153 samples
+        2.0: 22 + 85 + 119 + 0 + 34,   # FST II: 260 samples  
+        3.0: 8 + 31 + 57 + 0 + 30,     # FST III: 126 samples
+        4.0: 2 + 5 + 52 + 407 + 23,    # FST IV: 489 samples
+        5.0: 6 + 1 + 27 + 0 + 13,      # FST V: 47 samples
+        6.0: 1 + 0 + 9 + 81 + 7        # FST VI: 98 samples
+    },
+    'Minus Dermie': {
+        # Without Dermie dataset
+        1.0: 18 + 74 + 2 + 11,         # 105 samples
+        2.0: 85 + 119 + 0 + 34,        # 238 samples
+        3.0: 31 + 57 + 0 + 30,         # 118 samples
+        4.0: 5 + 52 + 407 + 23,        # 487 samples
+        5.0: 1 + 27 + 0 + 13,          # 41 samples
+        6.0: 0 + 9 + 81 + 7            # 97 samples
+    },
+    'Minus PADUFES': {
+        # Without PADUFES dataset
+        1.0: 48 + 74 + 2 + 11,         # 135 samples
+        2.0: 22 + 119 + 0 + 34,        # 175 samples
+        3.0: 8 + 57 + 0 + 30,          # 95 samples
+        4.0: 2 + 52 + 407 + 23,        # 484 samples
+        5.0: 6 + 27 + 0 + 13,          # 46 samples
+        6.0: 1 + 9 + 81 + 7            # 98 samples
+    },
+    'Minus SCIN': {
+        # Without SCIN dataset
+        1.0: 48 + 18 + 74 + 2,         # 142 samples
+        2.0: 22 + 85 + 119 + 0,        # 226 samples
+        3.0: 8 + 31 + 57 + 0,          # 96 samples
+        4.0: 2 + 5 + 52 + 407,         # 466 samples
+        5.0: 6 + 1 + 27 + 0,           # 34 samples
+        6.0: 1 + 0 + 9 + 81            # 91 samples
+    },
+    'Minus Fitzpatrick17k': {
+        # Without Fitzpatrick17k dataset
+        1.0: 48 + 18 + 2 + 11,         # 79 samples
+        2.0: 22 + 85 + 0 + 34,         # 141 samples
+        3.0: 8 + 31 + 0 + 30,          # 69 samples
+        4.0: 2 + 5 + 407 + 23,         # 437 samples
+        5.0: 6 + 1 + 0 + 13,           # 20 samples
+        6.0: 1 + 0 + 81 + 7            # 89 samples
+    },
+    'Minus India': {
+        # Without India dataset
+        1.0: 48 + 18 + 74 + 11,        # 151 samples
+        2.0: 22 + 85 + 119 + 34,       # 260 samples
+        3.0: 8 + 31 + 57 + 30,         # 126 samples
+        4.0: 2 + 5 + 52 + 23,          # 82 samples
+        5.0: 6 + 1 + 27 + 13,          # 47 samples
+        6.0: 1 + 0 + 9 + 7             # 17 samples
+    }
+}
+
 # Load data from combined_baseline_datsets.txt
 log_path = os.path.join(log_directory, 'combined_baseline_datasets.txt')
 
@@ -254,7 +313,7 @@ plt.savefig(os.path.join(output_directory, 'high_risk_vs_regular_by_dataset_remo
 plt.close()
 print("✓ Saved: high_risk_vs_regular_by_dataset_removed.png")
 
-# 3. All Misclassifications Heatmap by Dataset Configuration and Skin Tone
+# 3. All Misclassifications Heatmap by Dataset Configuration and Skin Tone (STRATIFIED BY SKIN TONE)
 # Use all skin tone data (not just 'All')
 skin_tone_data = baseline_data[baseline_data['Skin Tone'] != 'All']
 
@@ -264,21 +323,32 @@ if len(skin_tone_data) > 0:
     all_misclass_pivot_table = all_misclass_pivot.pivot_table(values='Count', index='Skin Tone', 
                                                              columns='Dataset_Removed', fill_value=0)
     
-    # Convert to percentages based on test condition counts
+    # Convert to percentages based on test condition counts BY SKIN TONE
     all_misclass_pivot_pct = all_misclass_pivot_table.copy()
     for dataset in all_misclass_pivot_pct.columns:
-        test_size = test_condition_counts[dataset]
-        all_misclass_pivot_pct[dataset] = (all_misclass_pivot_table[dataset] / test_size * 100).round(3)
+        if dataset in test_condition_counts_by_skin_tone:
+            for skin_tone in all_misclass_pivot_pct.index:
+                if skin_tone in test_condition_counts_by_skin_tone[dataset]:
+                    test_size = test_condition_counts_by_skin_tone[dataset][skin_tone]
+                    if test_size > 0:
+                        all_misclass_pivot_pct.loc[skin_tone, dataset] = (all_misclass_pivot_table.loc[skin_tone, dataset] / test_size * 100)
+                    else:
+                        all_misclass_pivot_pct.loc[skin_tone, dataset] = 0.0
+                else:
+                    all_misclass_pivot_pct.loc[skin_tone, dataset] = 0.0
+    
+    # Round to 2 decimal places
+    all_misclass_pivot_pct = all_misclass_pivot_pct.round(2)
     
     plt.figure(figsize=(12, 8))
     sns.heatmap(all_misclass_pivot_pct, 
                annot=True, 
-               fmt='.2f', 
+               fmt='.1f', 
                cmap='YlOrRd',
-               cbar_kws={'label': 'Misclassification Rate (% of Test Conditions)'},
+               cbar_kws={'label': 'Misclassification Rate (% of Test Conditions by Skin Tone)'},
                linewidths=0.5)
     
-    plt.title('All Misclassifications by Skin Tone and Dataset Configuration', fontsize=16, fontweight='bold')
+    plt.title('All Misclassifications by Skin Tone and Dataset Configuration\n(Percentages Stratified by Skin Tone)', fontsize=16, fontweight='bold')
     plt.xlabel('Dataset Configuration', fontsize=12)
     plt.ylabel('Skin Tone (Fitzpatrick Scale)', fontsize=12)
     plt.xticks(rotation=45, ha='right')
@@ -290,7 +360,7 @@ if len(skin_tone_data) > 0:
 else:
     print("No skin tone data found for all misclassifications heatmap")
 
-# 4. High-Risk Misclassifications Heatmap by Dataset Configuration and Skin Tone
+# 4. High-Risk Misclassifications Heatmap by Dataset Configuration and Skin Tone (STRATIFIED BY SKIN TONE)
 # Filter for high-risk misclassifications only (excluding 'All' skin tone)
 high_risk_skin_tone_data = baseline_data[
     (baseline_data['High_Risk'] == True) & 
@@ -303,21 +373,32 @@ if len(high_risk_skin_tone_data) > 0:
     high_risk_pivot_table = high_risk_pivot.pivot_table(values='Count', index='Skin Tone', 
                                                        columns='Dataset_Removed', fill_value=0)
     
-    # Convert to percentages based on test condition counts
+    # Convert to percentages based on test condition counts BY SKIN TONE
     high_risk_pivot_pct = high_risk_pivot_table.copy()
     for dataset in high_risk_pivot_pct.columns:
-        test_size = test_condition_counts[dataset]
-        high_risk_pivot_pct[dataset] = (high_risk_pivot_table[dataset] / test_size * 100).round(3)
+        if dataset in test_condition_counts_by_skin_tone:
+            for skin_tone in high_risk_pivot_pct.index:
+                if skin_tone in test_condition_counts_by_skin_tone[dataset]:
+                    test_size = test_condition_counts_by_skin_tone[dataset][skin_tone]
+                    if test_size > 0:
+                        high_risk_pivot_pct.loc[skin_tone, dataset] = (high_risk_pivot_table.loc[skin_tone, dataset] / test_size * 100)
+                    else:
+                        high_risk_pivot_pct.loc[skin_tone, dataset] = 0.0
+                else:
+                    high_risk_pivot_pct.loc[skin_tone, dataset] = 0.0
+    
+    # Round to 2 decimal places
+    high_risk_pivot_pct = high_risk_pivot_pct.round(2)
     
     plt.figure(figsize=(12, 8))
     sns.heatmap(high_risk_pivot_pct, 
                annot=True, 
-               fmt='.2f', 
-               cmap='YlOrRd',
-               cbar_kws={'label': 'High-Risk Misclassification Rate (% of Test Conditions)'},
+               fmt='.1f', 
+               cmap='Reds',
+               cbar_kws={'label': 'High-Risk Misclassification Rate (% of Test Conditions by Skin Tone)'},
                linewidths=0.5)
     
-    plt.title('High-Risk Misclassifications by Skin Tone and Dataset Configuration', fontsize=16, fontweight='bold')
+    plt.title('High-Risk Misclassifications by Skin Tone and Dataset Configuration\n(Percentages Stratified by Skin Tone)', fontsize=16, fontweight='bold')
     plt.xlabel('Dataset Configuration', fontsize=12)
     plt.ylabel('Skin Tone (Fitzpatrick Scale)', fontsize=12)
     plt.xticks(rotation=45, ha='right')
@@ -381,16 +462,26 @@ if len(high_risk_pairs_data) > 0:
     for pair, count in top_high_risk.items():
         print(f"  {pair}: {count} cases")
 
-# Skin tone bias analysis
+# Skin tone bias analysis - now using stratified percentages
 if len(skin_tone_data) > 0:
-    print(f"\nSkin Tone Distribution of Misclassifications:")
-    skin_tone_totals = skin_tone_data.groupby('Skin Tone')['Count'].sum().sort_values(ascending=False)
-    total_skin_tone_misclass = skin_tone_totals.sum()
-    
-    for tone, count in skin_tone_totals.items():
-        percentage = (count / total_skin_tone_misclass) * 100
-        print(f"  Skin Tone {tone}: {count} cases ({percentage:.1f}%)")
+    print(f"\nSkin Tone Misclassification Rates (Stratified by Skin Tone):")
+    for dataset in test_condition_counts_by_skin_tone.keys():
+        if dataset in skin_tone_data['Dataset_Removed'].values:
+            print(f"\n  {dataset}:")
+            dataset_skin_data = skin_tone_data[skin_tone_data['Dataset_Removed'] == dataset]
+            skin_tone_totals = dataset_skin_data.groupby('Skin_Tone')['Count'].sum()
+            
+            for skin_tone in sorted(skin_tone_totals.index):
+                if skin_tone in test_condition_counts_by_skin_tone[dataset]:
+                    misclass_count = skin_tone_totals[skin_tone]
+                    test_size = test_condition_counts_by_skin_tone[dataset][skin_tone]
+                    if test_size > 0:
+                        percentage = (misclass_count / test_size) * 100
+                        print(f"    Skin Tone {int(skin_tone)}: {misclass_count} misclassifications / {test_size} test samples = {percentage:.1f}%")
+                    else:
+                        print(f"    Skin Tone {int(skin_tone)}: {misclass_count} misclassifications / 0 test samples = N/A%")
 
 print(f"\nAll misclassification visualizations saved to: {output_directory}")
 print(f"Total visualization files created: {len([f for f in os.listdir(output_directory) if f.endswith('.png') and 'dataset_removed' in f])}")
-print(f"\nNote: All visualizations now display misclassification rates as percentages of test condition counts for each dataset configuration.")
+print(f"\nNote: Heatmaps now display misclassification rates as percentages stratified by skin tone for each dataset configuration.")
+print(f"Formula: (misclassifications for skin tone X in dataset Y / test samples for skin tone X in dataset Y) × 100")

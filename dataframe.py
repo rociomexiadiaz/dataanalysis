@@ -16,6 +16,8 @@ def parse_combined_log(filepath):
     stratified_sensitivities = []
     misclassifications = []
     misclassifications_by_tone = []
+    balanced_accuracies_by_skin_tone = []  # NEW
+    f1_scores = []  # NEW
 
     def parse_misclass_line(line):
         """Robust misclassification line parser"""
@@ -170,6 +172,146 @@ def parse_combined_log(filepath):
                             'Count': int(count)
                         })
 
+        ### 8. NEW: Balanced Accuracy Parsing
+        # Parse overall balanced accuracy
+        balanced_acc_match = re.search(r'Overall Balanced Accuracy:\s*([\d.]+)%', block)
+        if balanced_acc_match:
+            balanced_accuracies_by_skin_tone.append({
+                'Model': model,
+                'Datasets': datasets,
+                'Skin Tone': 'Overall',
+                'Metric': 'Overall Balanced Accuracy',
+                'Value': float(balanced_acc_match.group(1))
+            })
+
+        # Parse stratified balanced accuracies by skin tone
+        current_skin_tone = None
+        in_stratified_balanced_section = False
+        
+        for line in lines:
+            if "STRATIFIED BALANCED ACCURACY" in line:
+                in_stratified_balanced_section = True
+                continue
+            elif line.startswith("===") and in_stratified_balanced_section:
+                in_stratified_balanced_section = False
+                current_skin_tone = None
+                continue
+            elif in_stratified_balanced_section:
+                skin_tone_match = re.match(r'^Skin Tone:\s*([\d.]+)', line)
+                if skin_tone_match:
+                    current_skin_tone = float(skin_tone_match.group(1))
+                elif current_skin_tone is not None and "Overall Balanced Accuracy:" in line:
+                    balanced_acc_val_match = re.search(r'Overall Balanced Accuracy:\s*([\d.]+)%', line)
+                    if balanced_acc_val_match:
+                        balanced_accuracies_by_skin_tone.append({
+                            'Model': model,
+                            'Datasets': datasets,
+                            'Skin Tone': current_skin_tone,
+                            'Metric': 'Overall Balanced Accuracy',
+                            'Value': float(balanced_acc_val_match.group(1))
+                        })
+
+        ### 9. NEW: F1 Score Parsing
+        # Parse overall F1 scores
+        f1_macro_match = re.search(r'Overall F1 Score \(Macro\):\s*([\d.]+)%', block)
+        if f1_macro_match:
+            f1_scores.append({
+                'Model': model,
+                'Datasets': datasets,
+                'Condition': 'Overall',
+                'Metric': 'F1 Score (Macro)',
+                'Value': float(f1_macro_match.group(1))
+            })
+        
+        f1_weighted_match = re.search(r'Overall F1 Score \(Weighted\):\s*([\d.]+)%', block)
+        if f1_weighted_match:
+            f1_scores.append({
+                'Model': model,
+                'Datasets': datasets,
+                'Condition': 'Overall',
+                'Metric': 'F1 Score (Weighted)',
+                'Value': float(f1_weighted_match.group(1))
+            })
+
+        # Parse per condition F1 scores
+        in_f1_section = False
+        for line in lines:
+            if "Per Condition F1 Score:" in line:
+                in_f1_section = True
+                continue
+            elif line.startswith("===") and in_f1_section:
+                in_f1_section = False
+                break
+            elif in_f1_section and ":" in line:
+                f1_condition_match = re.search(r'\s*(.+?):\s*([\d.]+)%', line)
+                if f1_condition_match:
+                    condition, value = f1_condition_match.groups()
+                    f1_scores.append({
+                        'Model': model,
+                        'Datasets': datasets,
+                        'Condition': condition.strip(),
+                        'Metric': 'F1 Score',
+                        'Value': float(value)
+                    })
+
+        # Parse stratified F1 scores by skin tone
+        current_skin_tone = None
+        in_stratified_f1_section = False
+        in_per_condition_subsection = False
+        
+        for line in lines:
+            if "STRATIFIED F1 SCORE" in line:
+                in_stratified_f1_section = True
+                continue
+            elif line.startswith("===") and in_stratified_f1_section:
+                in_stratified_f1_section = False
+                current_skin_tone = None
+                in_per_condition_subsection = False
+                continue
+            elif in_stratified_f1_section:
+                skin_tone_match = re.match(r'^Skin Tone:\s*([\d.]+)', line)
+                if skin_tone_match:
+                    current_skin_tone = float(skin_tone_match.group(1))
+                    in_per_condition_subsection = False
+                elif current_skin_tone is not None:
+                    # Parse overall F1 scores for this skin tone
+                    f1_macro_stratified_match = re.search(r'Overall F1 Score \(Macro\):\s*([\d.]+)%', line)
+                    if f1_macro_stratified_match:
+                        f1_scores.append({
+                            'Model': model,
+                            'Datasets': datasets,
+                            'Condition': 'Overall',
+                            'Skin_Tone': current_skin_tone,
+                            'Metric': 'F1 Score (Macro) Stratified',
+                            'Value': float(f1_macro_stratified_match.group(1))
+                        })
+                    
+                    f1_weighted_stratified_match = re.search(r'Overall F1 Score \(Weighted\):\s*([\d.]+)%', line)
+                    if f1_weighted_stratified_match:
+                        f1_scores.append({
+                            'Model': model,
+                            'Datasets': datasets,
+                            'Condition': 'Overall',
+                            'Skin_Tone': current_skin_tone,
+                            'Metric': 'F1 Score (Weighted) Stratified',
+                            'Value': float(f1_weighted_stratified_match.group(1))
+                        })
+                    
+                    if "Per Condition:" in line:
+                        in_per_condition_subsection = True
+                    elif in_per_condition_subsection and ":" in line:
+                        f1_stratified_match = re.search(r'\s*(.+?):\s*([\d.]+)%', line)
+                        if f1_stratified_match:
+                            condition, value = f1_stratified_match.groups()
+                            f1_scores.append({
+                                'Model': model,
+                                'Datasets': datasets,
+                                'Condition': condition.strip(),
+                                'Skin_Tone': current_skin_tone,
+                                'Metric': 'F1 Score (Stratified)',
+                                'Value': float(value)
+                            })
+
     # Convert all to DataFrames
     return {
         'AverageSensitivities': pd.DataFrame(avg_sensitivities),
@@ -177,15 +319,26 @@ def parse_combined_log(filepath):
         'SkinToneAccuracies': pd.DataFrame(skin_tone_sensitivities),
         'StratifiedSensitivities': pd.DataFrame(stratified_sensitivities),
         'MisclassifiedCounts': pd.DataFrame(misclassifications),
-        'MisclassificationDetails': pd.DataFrame(misclassifications_by_tone)
+        'MisclassificationDetails': pd.DataFrame(misclassifications_by_tone),
+        'BalancedAccuraciesBySkinTone': pd.DataFrame(balanced_accuracies_by_skin_tone),  # NEW
+        'F1Scores': pd.DataFrame(f1_scores)  # NEW
     }
 
 
 # Example usage:
 if __name__ == "__main__":
-    log_path = "/mnt/data/combined.txt"
+    log_path = "combined_all.txt"
     df_dict = parse_combined_log(log_path)
 
     # Access example:
-    print(df_dict['AverageSensitivities'].head())
-    print(df_dict['MisclassificationDetails'].head())
+    print("Available DataFrames:")
+    for key, df in df_dict.items():
+        print(f"  {key}: {len(df)} records")
+    
+    if not df_dict['BalancedAccuraciesBySkinTone'].empty:
+        print("\nBalanced Accuracies sample:")
+        print(df_dict['BalancedAccuraciesBySkinTone'].head())
+    
+    if not df_dict['F1Scores'].empty:
+        print("\nF1 Scores sample:")
+        print(df_dict['F1Scores'].head())

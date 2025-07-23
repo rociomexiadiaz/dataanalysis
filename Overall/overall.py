@@ -13,10 +13,20 @@ from dataframe import parse_combined_log
 
 # Configuration - Third folder structure
 log_directory = r"C:\Users\rmexi\OneDrive - University College London\Project\DataAnalysis"
-output_directory = r"C:\Users\rmexi\OneDrive - University College London\Project\DataAnalysis\Third"
+output_directory = r"C:\Users\rmexi\OneDrive - University College London\Project\DataAnalysis\Overall"
 
 # Create output directory if it doesn't exist
 os.makedirs(output_directory, exist_ok=True)
+
+# Fitzpatrick Skin Tone color mapping
+fst_color_map = {
+    1.0: '#F5D5A0',
+    2.0: '#E4B589',
+    3.0: '#D1A479',
+    4.0: '#C0874F',
+    5.0: '#A56635',
+    6.0: '#4C2C27'
+}
 
 def parse_all_log_files(log_directory):
     """Parse all log files and combine into a single dataset"""
@@ -46,7 +56,9 @@ def parse_all_log_files(log_directory):
         'SkinToneAccuracies': [],
         'StratifiedSensitivities': [],
         'MisclassifiedCounts': [],
-        'MisclassificationDetails': []
+        'MisclassificationDetails': [],
+        'BalancedAccuraciesBySkinTone': [],  # NEW
+        'F1Scores': []  # NEW
     }
     
     for log_file in log_files:
@@ -272,14 +284,162 @@ def create_top1_sensitivity_heatmap(df_dict, output_directory):
     plt.close()
     print("✓ Saved: top1_sensitivity_heatmap.png")
 
+def create_balanced_accuracy_plot(df_dict, output_directory):
+    """
+    Create balanced accuracy comparison plot - NEW FUNCTION
+    """
+    print("\n=== Creating Balanced Accuracy Plot ===")
+    
+    # Use balanced accuracies by skin tone data
+    if 'BalancedAccuraciesBySkinTone' not in df_dict or df_dict['BalancedAccuraciesBySkinTone'].empty:
+        print("✗ No balanced accuracy data found")
+        return
+    
+    balanced_data = df_dict['BalancedAccuraciesBySkinTone']
+    
+    # Filter for 'all' dataset, Overall Balanced Accuracy, and exclude 'Overall' skin tone
+    bal_acc_data = balanced_data[
+        (balanced_data['Datasets'] == 'all') & 
+        (balanced_data['Metric'] == 'Overall Balanced Accuracy') &
+        (balanced_data['Skin Tone'] != 'Overall')  # Exclude overall, only skin tone specific
+    ].copy()
+    
+    if len(bal_acc_data) == 0:
+        print("✗ No balanced accuracy data found for 'all' dataset with specific skin tones")
+        return
+    
+    # Clean model names and include FairDisCo
+    bal_acc_data['Model'] = bal_acc_data['Model'].replace({
+        'train_Baseline': 'Baseline',
+        'train_VAE': 'VAE',
+        'train_TABE': 'TABE',
+        'train_FairDisCo': 'FairDisCo'
+    })
+    
+    # Only filter out csv files, keep FairDisCo
+    excluded_models = ['csv', 'CSV']
+    bal_acc_data = bal_acc_data[~bal_acc_data['Model'].isin(excluded_models)]
+    
+    if len(bal_acc_data) == 0:
+        print("✗ No valid model data after filtering")
+        return
+    
+    # Create the plot
+    plt.figure(figsize=(14, 8))
+    
+    # Group by model and skin tone
+    pivot_data = bal_acc_data.pivot_table(values='Value', index='Model', columns='Skin Tone', aggfunc='mean')
+    
+    if not pivot_data.empty:
+        # Create grouped bar plot - now all columns should be numeric
+        skin_tones = sorted(pivot_data.columns)  # This should work now
+        models = pivot_data.index
+        x = np.arange(len(models))
+        width = 0.8 / len(skin_tones)
+        
+        for i, skin_tone in enumerate(skin_tones):
+            values = [pivot_data.loc[model, skin_tone] if skin_tone in pivot_data.columns else 0 for model in models]
+            color = fst_color_map.get(skin_tone, '#1f77b4')
+            bars = plt.bar(x + i*width, values, width, label=f'FST {int(skin_tone)}', alpha=0.8, color=color)
+            
+            # Add value labels
+            for j, (bar, value) in enumerate(zip(bars, values)):
+                if value > 0:
+                    plt.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.3,
+                            f'{value:.1f}', ha='center', va='bottom', fontsize=8)
+        
+        plt.xlabel('Model', fontsize=12)
+        plt.ylabel('Balanced Accuracy (%)', fontsize=12)
+        plt.title('Balanced Accuracy by Model and Skin Tone\n(All Datasets Combined)', fontsize=14)
+        plt.xticks(x + width * (len(skin_tones) - 1) / 2, models, rotation=45, ha='right')
+        plt.legend()
+        plt.grid(True, alpha=0.3, axis='y')
+    
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_directory, 'balanced_accuracy_comparison.png'), dpi=300, bbox_inches='tight')
+    plt.close()
+    print("✓ Saved: balanced_accuracy_comparison.png")
+
+def create_f1_score_heatmap(df_dict, output_directory):
+    """
+    Create F1 score heatmap in the same format as top1_sensitivity_heatmap - NEW FUNCTION
+    """
+    print("\n=== Creating F1 Score Heatmap ===")
+    
+    # Use F1 scores data
+    if 'F1Scores' not in df_dict or df_dict['F1Scores'].empty:
+        print("✗ No F1 score data found")
+        return
+    
+    f1_data = df_dict['F1Scores']
+    
+    # Filter for 'all' dataset and regular F1 Score (condition-specific)
+    f1_condition_data = f1_data[
+        (f1_data['Datasets'] == 'all') & 
+        (f1_data['Metric'] == 'F1 Score') &
+        (f1_data['Condition'] != 'Overall')  # Exclude overall F1 scores
+    ].copy()
+    
+    if len(f1_condition_data) == 0:
+        print("✗ No condition-specific F1 score data found for 'all' dataset")
+        return
+    
+    # Clean model names and include FairDisCo
+    f1_condition_data['Model'] = f1_condition_data['Model'].replace({
+        'train_Baseline': 'Baseline',
+        'train_VAE': 'VAE',
+        'train_TABE': 'TABE',
+        'train_FairDisCo': 'FairDisCo'
+    })
+    
+    # Only filter out csv files, keep FairDisCo
+    excluded_models = ['csv', 'CSV']
+    f1_condition_data = f1_condition_data[~f1_condition_data['Model'].isin(excluded_models)]
+    
+    if len(f1_condition_data) == 0:
+        print("✗ No valid model data after filtering")
+        return
+    
+    # Create pivot table for heatmap
+    heatmap_data = f1_condition_data.pivot_table(values='Value', index='Condition', columns='Model', aggfunc='mean')
+    
+    if not heatmap_data.empty:
+        # Create the heatmap
+        plt.figure(figsize=(12, 8))
+        
+        # Use the same RdYlGn colormap as the sensitivity heatmap
+        sns.heatmap(
+            heatmap_data,
+            cmap=sns.color_palette("RdYlGn", as_cmap=True),
+            vmin=0,
+            vmax=100,
+            annot=True,
+            fmt=".1f",
+            cbar_kws={'label': 'F1 Score (%)'},
+            linewidths=0.5
+        )
+        
+        plt.xlabel("Model", fontsize=12)
+        plt.ylabel("Condition", fontsize=12)
+        plt.title("F1 Score Heatmap by Condition and Model\n(All Datasets Combined)", fontsize=14, pad=20)
+        plt.xticks(rotation=45, ha='right')
+        plt.yticks(rotation=0)
+    
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_directory, 'f1_score_heatmap.png'), dpi=300, bbox_inches='tight')
+    plt.close()
+    print("✓ Saved: f1_score_heatmap.png")
+
 def main():
     """
-    Main function - generates only overall performance comparison and top1 sensitivity heatmap
+    Main function - generates original plots plus new balanced accuracy and F1 plots
     """
-    print("=== Third.py - Focused Analysis ===")
-    print("Generating only:")
-    print("1. Overall Performance Comparison")
-    print("2. Top-1 Sensitivity Heatmap")
+    print("=== Enhanced Overall Analysis ===")
+    print("Generating:")
+    print("1. Overall Performance Comparison (ORIGINAL)")
+    print("2. Top-1 Sensitivity Heatmap (ORIGINAL)")
+    print("3. Balanced Accuracy Comparison (NEW)")
+    print("4. F1 Score Heatmap (NEW)")
     
     # Parse all log files
     print("\nParsing all log files...")
@@ -288,7 +448,7 @@ def main():
     print("Data parsing complete!")
     print(f"Available dataframes: {list(df_dict.keys())}")
     
-    # Check if we have condition sensitivity data
+    # Check if we have the required data
     if 'ConditionSensitivities' in df_dict and not df_dict['ConditionSensitivities'].empty:
         print(f"ConditionSensitivities shape: {df_dict['ConditionSensitivities'].shape}")
         print(f"Datasets found: {df_dict['ConditionSensitivities']['Datasets'].unique()}")
@@ -299,9 +459,21 @@ def main():
         print("✗ No ConditionSensitivities data found!")
         return
     
-    # Generate the two required visualizations
+    # Check for new data types
+    if 'BalancedAccuraciesBySkinTone' in df_dict and not df_dict['BalancedAccuraciesBySkinTone'].empty:
+        print(f"BalancedAccuraciesBySkinTone shape: {df_dict['BalancedAccuraciesBySkinTone'].shape}")
+    
+    if 'F1Scores' in df_dict and not df_dict['F1Scores'].empty:
+        print(f"F1Scores shape: {df_dict['F1Scores'].shape}")
+    
+    # Generate the original visualizations
     create_overall_performance_comparison(df_dict, output_directory)
     create_top1_sensitivity_heatmap(df_dict, output_directory)
+    
+    # Generate the new visualizations
+    create_balanced_accuracy_plot(df_dict, output_directory)
+    # Removed: create_balanced_accuracy_by_skin_tone_plot() - redundant with above
+    create_f1_score_heatmap(df_dict, output_directory)
     
     # Summary statistics
     condition_data = df_dict['ConditionSensitivities']
@@ -338,8 +510,10 @@ def main():
     
     print(f"\nAnalysis complete! Generated files saved to: {output_directory}")
     print("Files created:")
-    print("- overall_performance_comparison.png")
-    print("- top1_sensitivity_heatmap.png")
+    print("- overall_performance_comparison.png (ORIGINAL)")
+    print("- top1_sensitivity_heatmap.png (ORIGINAL)")
+    print("- balanced_accuracy_comparison.png (NEW)")
+    print("- f1_score_heatmap.png (NEW)")
 
 if __name__ == "__main__":
     main()

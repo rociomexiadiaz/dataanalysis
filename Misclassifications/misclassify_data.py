@@ -48,6 +48,7 @@ high_risk_pairs = [
     ('scc â', 'eczema'),
     ('scc â', 'psoriasis'),
     ('scc â', 'urticaria'),
+    ('cancer â', 'non-cancer')
 ]
 
 def normalize_condition_name(name):

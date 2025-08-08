@@ -3,6 +3,7 @@ import pandas as pd
 from collections import defaultdict
 
 def parse_combined_log(filepath):
+    """Fixed version of parse_combined_log with consistent column names"""
     with open(filepath, 'r') as file:
         content = file.read()
 
@@ -16,8 +17,8 @@ def parse_combined_log(filepath):
     stratified_sensitivities = []
     misclassifications = []
     misclassifications_by_tone = []
-    balanced_accuracies_by_skin_tone = []  # NEW
-    f1_scores = []  # NEW
+    balanced_accuracies_by_skin_tone = []
+    f1_scores = []
 
     def parse_misclass_line(line):
         """Robust misclassification line parser"""
@@ -120,7 +121,7 @@ def parse_combined_log(filepath):
                 'Misclassified Samples': int(misclassified.group(1))
             })
 
-        ### 6. ROBUST: Most common misclassifications (overall)
+        ### 6. Most common misclassifications (overall)
         lines = block.split('\n')
         in_overall_section = False
         
@@ -144,7 +145,7 @@ def parse_combined_log(filepath):
                         'Count': int(count)
                     })
 
-        ### 7. ROBUST: Most common misclassifications by skin tone
+        ### 7. Most common misclassifications by skin tone
         current_skin_tone = None
         in_skin_tone_section = False
         
@@ -172,7 +173,7 @@ def parse_combined_log(filepath):
                             'Count': int(count)
                         })
 
-        ### 8. NEW: Balanced Accuracy Parsing
+        ### 8. Balanced Accuracy Parsing
         # Parse overall balanced accuracy
         balanced_acc_match = re.search(r'Overall Balanced Accuracy:\s*([\d.]+)%', block)
         if balanced_acc_match:
@@ -211,7 +212,7 @@ def parse_combined_log(filepath):
                             'Value': float(balanced_acc_val_match.group(1))
                         })
 
-        ### 9. NEW: F1 Score Parsing
+        ### 9. FIXED: F1 Score Parsing with consistent column names
         # Parse overall F1 scores
         f1_macro_match = re.search(r'Overall F1 Score \(Macro\):\s*([\d.]+)%', block)
         if f1_macro_match:
@@ -219,6 +220,7 @@ def parse_combined_log(filepath):
                 'Model': model,
                 'Datasets': datasets,
                 'Condition': 'Overall',
+                'Skin Tone': None,  # FIXED: Use 'Skin Tone' not 'Skin_Tone'
                 'Metric': 'F1 Score (Macro)',
                 'Value': float(f1_macro_match.group(1))
             })
@@ -229,6 +231,7 @@ def parse_combined_log(filepath):
                 'Model': model,
                 'Datasets': datasets,
                 'Condition': 'Overall',
+                'Skin Tone': None,  # FIXED: Use 'Skin Tone' not 'Skin_Tone'
                 'Metric': 'F1 Score (Weighted)',
                 'Value': float(f1_weighted_match.group(1))
             })
@@ -250,6 +253,7 @@ def parse_combined_log(filepath):
                         'Model': model,
                         'Datasets': datasets,
                         'Condition': condition.strip(),
+                        'Skin Tone': None,  # FIXED: Use 'Skin Tone' not 'Skin_Tone'
                         'Metric': 'F1 Score',
                         'Value': float(value)
                     })
@@ -281,8 +285,8 @@ def parse_combined_log(filepath):
                             'Model': model,
                             'Datasets': datasets,
                             'Condition': 'Overall',
-                            'Skin_Tone': current_skin_tone,
-                            'Metric': 'F1 Score (Macro) Stratified',
+                            'Skin Tone': current_skin_tone,  # FIXED: Use 'Skin Tone' not 'Skin_Tone'
+                            'Metric': 'F1 Score (Macro)',
                             'Value': float(f1_macro_stratified_match.group(1))
                         })
                     
@@ -292,9 +296,9 @@ def parse_combined_log(filepath):
                             'Model': model,
                             'Datasets': datasets,
                             'Condition': 'Overall',
-                            'Skin_Tone': current_skin_tone,
-                            'Metric': 'F1 Score (Weighted) Stratified',
-                            'Value': float(f1_weighted_stratified_match.group(1))
+                            'Skin Tone': current_skin_tone,  # FIXED: Use 'Skin Tone' not 'Skin_Tone'
+                            'Metric': 'F1 Score (Weighted)',
+                            'Value': float(f1_weighted_stratified_match.group(1))  # FIXED: Use correct variable
                         })
                     
                     if "Per Condition:" in line:
@@ -307,8 +311,8 @@ def parse_combined_log(filepath):
                                 'Model': model,
                                 'Datasets': datasets,
                                 'Condition': condition.strip(),
-                                'Skin_Tone': current_skin_tone,
-                                'Metric': 'F1 Score (Stratified)',
+                                'Skin Tone': current_skin_tone,  # FIXED: Use 'Skin Tone' not 'Skin_Tone'
+                                'Metric': 'F1 Score',
                                 'Value': float(value)
                             })
 
@@ -320,8 +324,8 @@ def parse_combined_log(filepath):
         'StratifiedSensitivities': pd.DataFrame(stratified_sensitivities),
         'MisclassifiedCounts': pd.DataFrame(misclassifications),
         'MisclassificationDetails': pd.DataFrame(misclassifications_by_tone),
-        'BalancedAccuraciesBySkinTone': pd.DataFrame(balanced_accuracies_by_skin_tone),  # NEW
-        'F1Scores': pd.DataFrame(f1_scores)  # NEW
+        'BalancedAccuraciesBySkinTone': pd.DataFrame(balanced_accuracies_by_skin_tone),
+        'F1Scores': pd.DataFrame(f1_scores)  # This now has consistent column names
     }
 
 

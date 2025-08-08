@@ -1,0 +1,612 @@
+Python Filename: train_Baseline.py
+Datasets: Dermie + Padufes + SCIN + Fitzpatrick17k + India
+Metrics: === OVERALL ACCURACIES ===
+Top-1 Accuracy: 82.43%
+
+=== TOP-1 SENSITIVITY ===
+Condition: Benign, Top-1 Sensitivity: 89.96%
+Condition: Malignant, Top-1 Sensitivity: 74.90%
+Average Top-1 Sensitivity: 82.43%
+
+=== STRATIFIED TOP-1 ACCURACY ===
+Skin Tone: 1.0, Top-1 Accuracy: 81.36%
+Skin Tone: 2.0, Top-1 Accuracy: 81.93%
+Skin Tone: 3.0, Top-1 Accuracy: 83.76%
+Skin Tone: 4.0, Top-1 Accuracy: 87.50%
+Skin Tone: 5.0, Top-1 Accuracy: 72.73%
+Skin Tone: 6.0, Top-1 Accuracy: 83.33%
+
+=== STRATIFIED TOP-1 SENSITIVITY ===
+Skin Tone: 1.0
+  Condition: Benign, Top-1 Sensitivity: 90.16%
+  Condition: Malignant, Top-1 Sensitivity: 71.93%
+
+Skin Tone: 2.0
+  Condition: Benign, Top-1 Sensitivity: 88.75%
+  Condition: Malignant, Top-1 Sensitivity: 75.58%
+
+Skin Tone: 3.0
+  Condition: Benign, Top-1 Sensitivity: 85.71%
+  Condition: Malignant, Top-1 Sensitivity: 81.97%
+
+Skin Tone: 4.0
+  Condition: Benign, Top-1 Sensitivity: 95.56%
+  Condition: Malignant, Top-1 Sensitivity: 74.07%
+
+Skin Tone: 5.0
+  Condition: Benign, Top-1 Sensitivity: 92.31%
+  Condition: Malignant, Top-1 Sensitivity: 60.00%
+
+Skin Tone: 6.0
+  Condition: Benign, Top-1 Sensitivity: 100.00%
+  Condition: Malignant, Top-1 Sensitivity: 75.00%
+
+
+=== BALANCED ACCURACY ===
+Overall Balanced Accuracy: 82.43%
+
+=== STRATIFIED BALANCED ACCURACY ===
+
+Skin Tone: 1.0
+  Overall Balanced Accuracy: 81.05%
+
+Skin Tone: 2.0
+  Overall Balanced Accuracy: 82.17%
+
+Skin Tone: 3.0
+  Overall Balanced Accuracy: 83.84%
+
+Skin Tone: 4.0
+  Overall Balanced Accuracy: 84.81%
+
+Skin Tone: 5.0
+  Overall Balanced Accuracy: 76.15%
+
+Skin Tone: 6.0
+  Overall Balanced Accuracy: 87.50%
+
+=== F1 SCORE ===
+Overall F1 Score (Macro): 82.33%
+Overall F1 Score (Weighted): 82.33%
+
+Per Condition F1 Score:
+  Benign: 83.66%
+  Malignant: 81.00%
+
+=== STRATIFIED F1 SCORE ===
+
+Skin Tone: 1.0
+  Overall F1 Score (Macro): 81.09%
+  Overall F1 Score (Weighted): 81.17%
+  Per Condition:
+    Benign: 83.33%
+    Malignant: 78.85%
+
+Skin Tone: 2.0
+  Overall F1 Score (Macro): 81.90%
+  Overall F1 Score (Weighted): 81.88%
+  Per Condition:
+    Benign: 82.56%
+    Malignant: 81.25%
+
+Skin Tone: 3.0
+  Overall F1 Score (Macro): 83.76%
+  Overall F1 Score (Weighted): 83.77%
+  Per Condition:
+    Benign: 83.48%
+    Malignant: 84.03%
+
+Skin Tone: 4.0
+  Overall F1 Score (Macro): 86.08%
+  Overall F1 Score (Weighted): 87.19%
+  Per Condition:
+    Benign: 90.53%
+    Malignant: 81.63%
+
+Skin Tone: 5.0
+  Overall F1 Score (Macro): 72.73%
+  Overall F1 Score (Weighted): 72.73%
+  Per Condition:
+    Benign: 72.73%
+    Malignant: 72.73%
+
+Skin Tone: 6.0
+  Overall F1 Score (Macro): 82.86%
+  Overall F1 Score (Weighted): 83.81%
+  Per Condition:
+    Benign: 80.00%
+    Malignant: 85.71%
+
+Number of misclassified samples: 91
+
+=== MOST COMMON MISCLASSIFICATIONS (OVERALL) ===
+  Malignant → Benign: 65 times
+  Benign → Malignant: 26 times
+
+=== MOST COMMON MISCLASSIFICATIONS BY SKIN TONE ===
+
+Skin Tone 1.0:
+  Malignant → Benign: 16 times
+  Benign → Malignant: 6 times
+
+Skin Tone 4.0:
+  Malignant → Benign: 7 times
+  Benign → Malignant: 2 times
+
+Skin Tone 2.0:
+  Malignant → Benign: 21 times
+  Benign → Malignant: 9 times
+
+Skin Tone 5.0:
+  Malignant → Benign: 8 times
+  Benign → Malignant: 1 times
+
+Skin Tone 3.0:
+  Malignant → Benign: 11 times
+  Benign → Malignant: 8 times
+
+Skin Tone 6.0:
+  Malignant → Benign: 2 times
+GradCAM Plot Path: Logs/gradCAM_20250807_173301.png
+Train Dataset Visualisation: Logs/Train_dataset_20250807_173301.png
+Test Dataset Visualisation: Logs/Test_dataset_20250807_173301.png
+
+
+Python Filename: train_FairDisCo.py
+Datasets: Dermie + Padufes + SCIN + Fitzpatrick17k + India
+Metrics: === OVERALL ACCURACIES ===
+Top-1 Accuracy: 50.00%
+
+=== TOP-1 SENSITIVITY ===
+Condition: Benign, Top-1 Sensitivity: 100.00%
+Condition: Malignant, Top-1 Sensitivity: 0.00%
+Average Top-1 Sensitivity: 50.00%
+
+=== STRATIFIED TOP-1 ACCURACY ===
+Skin Tone: 1.0, Top-1 Accuracy: 51.69%
+Skin Tone: 2.0, Top-1 Accuracy: 48.19%
+Skin Tone: 3.0, Top-1 Accuracy: 47.86%
+Skin Tone: 4.0, Top-1 Accuracy: 62.50%
+Skin Tone: 5.0, Top-1 Accuracy: 39.39%
+Skin Tone: 6.0, Top-1 Accuracy: 33.33%
+
+=== STRATIFIED TOP-1 SENSITIVITY ===
+Skin Tone: 1.0
+  Condition: Benign, Top-1 Sensitivity: 100.00%
+  Condition: Malignant, Top-1 Sensitivity: 0.00%
+
+Skin Tone: 2.0
+  Condition: Benign, Top-1 Sensitivity: 100.00%
+  Condition: Malignant, Top-1 Sensitivity: 0.00%
+
+Skin Tone: 3.0
+  Condition: Benign, Top-1 Sensitivity: 100.00%
+  Condition: Malignant, Top-1 Sensitivity: 0.00%
+
+Skin Tone: 4.0
+  Condition: Benign, Top-1 Sensitivity: 100.00%
+  Condition: Malignant, Top-1 Sensitivity: 0.00%
+
+Skin Tone: 5.0
+  Condition: Benign, Top-1 Sensitivity: 100.00%
+  Condition: Malignant, Top-1 Sensitivity: 0.00%
+
+Skin Tone: 6.0
+  Condition: Benign, Top-1 Sensitivity: 100.00%
+  Condition: Malignant, Top-1 Sensitivity: 0.00%
+
+
+=== BALANCED ACCURACY ===
+Overall Balanced Accuracy: 50.00%
+
+=== STRATIFIED BALANCED ACCURACY ===
+
+Skin Tone: 1.0
+  Overall Balanced Accuracy: 50.00%
+
+Skin Tone: 2.0
+  Overall Balanced Accuracy: 50.00%
+
+Skin Tone: 3.0
+  Overall Balanced Accuracy: 50.00%
+
+Skin Tone: 4.0
+  Overall Balanced Accuracy: 50.00%
+
+Skin Tone: 5.0
+  Overall Balanced Accuracy: 50.00%
+
+Skin Tone: 6.0
+  Overall Balanced Accuracy: 50.00%
+
+=== F1 SCORE ===
+Overall F1 Score (Macro): 33.33%
+Overall F1 Score (Weighted): 33.33%
+
+Per Condition F1 Score:
+  Benign: 66.67%
+  Malignant: 0.00%
+
+=== STRATIFIED F1 SCORE ===
+
+Skin Tone: 1.0
+  Overall F1 Score (Macro): 34.08%
+  Overall F1 Score (Weighted): 35.23%
+  Per Condition:
+    Benign: 68.16%
+    Malignant: 0.00%
+
+Skin Tone: 2.0
+  Overall F1 Score (Macro): 32.52%
+  Overall F1 Score (Weighted): 31.34%
+  Per Condition:
+    Benign: 65.04%
+    Malignant: 0.00%
+
+Skin Tone: 3.0
+  Overall F1 Score (Macro): 32.37%
+  Overall F1 Score (Weighted): 30.99%
+  Per Condition:
+    Benign: 64.74%
+    Malignant: 0.00%
+
+Skin Tone: 4.0
+  Overall F1 Score (Macro): 38.46%
+  Overall F1 Score (Weighted): 48.08%
+  Per Condition:
+    Benign: 76.92%
+    Malignant: 0.00%
+
+Skin Tone: 5.0
+  Overall F1 Score (Macro): 28.26%
+  Overall F1 Score (Weighted): 22.27%
+  Per Condition:
+    Benign: 56.52%
+    Malignant: 0.00%
+
+Skin Tone: 6.0
+  Overall F1 Score (Macro): 25.00%
+  Overall F1 Score (Weighted): 16.67%
+  Per Condition:
+    Benign: 50.00%
+    Malignant: 0.00%
+
+Number of misclassified samples: 259
+
+=== MOST COMMON MISCLASSIFICATIONS (OVERALL) ===
+  Malignant → Benign: 259 times
+
+=== MOST COMMON MISCLASSIFICATIONS BY SKIN TONE ===
+
+Skin Tone 4.0:
+  Malignant → Benign: 27 times
+
+Skin Tone 1.0:
+  Malignant → Benign: 57 times
+
+Skin Tone 2.0:
+  Malignant → Benign: 86 times
+
+Skin Tone 5.0:
+  Malignant → Benign: 20 times
+
+Skin Tone 3.0:
+  Malignant → Benign: 61 times
+
+Skin Tone 6.0:
+  Malignant → Benign: 8 times
+GradCAM Plot Path: Logs/gradCAM_20250807_173756.png
+Train Dataset Visualisation: Logs/Train_dataset_20250807_173756.png
+Test Dataset Visualisation: Logs/Test_dataset_20250807_173756.png
+
+
+Python Filename: train_TABE.py
+Datasets: Dermie + Padufes + SCIN + Fitzpatrick17k + India
+Metrics: === OVERALL ACCURACIES ===
+Top-1 Accuracy: 85.52%
+
+=== TOP-1 SENSITIVITY ===
+Condition: Benign, Top-1 Sensitivity: 86.10%
+Condition: Malignant, Top-1 Sensitivity: 84.94%
+Average Top-1 Sensitivity: 85.52%
+
+=== STRATIFIED TOP-1 ACCURACY ===
+Skin Tone: 1.0, Top-1 Accuracy: 87.29%
+Skin Tone: 2.0, Top-1 Accuracy: 81.93%
+Skin Tone: 3.0, Top-1 Accuracy: 90.60%
+Skin Tone: 4.0, Top-1 Accuracy: 81.94%
+Skin Tone: 5.0, Top-1 Accuracy: 90.91%
+Skin Tone: 6.0, Top-1 Accuracy: 75.00%
+
+=== STRATIFIED TOP-1 SENSITIVITY ===
+Skin Tone: 1.0
+  Condition: Benign, Top-1 Sensitivity: 88.52%
+  Condition: Malignant, Top-1 Sensitivity: 85.96%
+
+Skin Tone: 2.0
+  Condition: Benign, Top-1 Sensitivity: 80.00%
+  Condition: Malignant, Top-1 Sensitivity: 83.72%
+
+Skin Tone: 3.0
+  Condition: Benign, Top-1 Sensitivity: 92.86%
+  Condition: Malignant, Top-1 Sensitivity: 88.52%
+
+Skin Tone: 4.0
+  Condition: Benign, Top-1 Sensitivity: 82.22%
+  Condition: Malignant, Top-1 Sensitivity: 81.48%
+
+Skin Tone: 5.0
+  Condition: Benign, Top-1 Sensitivity: 92.31%
+  Condition: Malignant, Top-1 Sensitivity: 90.00%
+
+Skin Tone: 6.0
+  Condition: Benign, Top-1 Sensitivity: 100.00%
+  Condition: Malignant, Top-1 Sensitivity: 62.50%
+
+
+=== BALANCED ACCURACY ===
+Overall Balanced Accuracy: 85.52%
+
+=== STRATIFIED BALANCED ACCURACY ===
+
+Skin Tone: 1.0
+  Overall Balanced Accuracy: 87.24%
+
+Skin Tone: 2.0
+  Overall Balanced Accuracy: 81.86%
+
+Skin Tone: 3.0
+  Overall Balanced Accuracy: 90.69%
+
+Skin Tone: 4.0
+  Overall Balanced Accuracy: 81.85%
+
+Skin Tone: 5.0
+  Overall Balanced Accuracy: 91.15%
+
+Skin Tone: 6.0
+  Overall Balanced Accuracy: 81.25%
+
+=== F1 SCORE ===
+Overall F1 Score (Macro): 85.52%
+Overall F1 Score (Weighted): 85.52%
+
+Per Condition F1 Score:
+  Benign: 85.60%
+  Malignant: 85.44%
+
+=== STRATIFIED F1 SCORE ===
+
+Skin Tone: 1.0
+  Overall F1 Score (Macro): 87.27%
+  Overall F1 Score (Weighted): 87.28%
+  Per Condition:
+    Benign: 87.80%
+    Malignant: 86.73%
+
+Skin Tone: 2.0
+  Overall F1 Score (Macro): 81.89%
+  Overall F1 Score (Weighted): 81.92%
+  Per Condition:
+    Benign: 81.01%
+    Malignant: 82.76%
+
+Skin Tone: 3.0
+  Overall F1 Score (Macro): 90.60%
+  Overall F1 Score (Weighted): 90.60%
+  Per Condition:
+    Benign: 90.43%
+    Malignant: 90.76%
+
+Skin Tone: 4.0
+  Overall F1 Score (Macro): 81.13%
+  Overall F1 Score (Weighted): 82.11%
+  Per Condition:
+    Benign: 85.06%
+    Malignant: 77.19%
+
+Skin Tone: 5.0
+  Overall F1 Score (Macro): 90.60%
+  Overall F1 Score (Weighted): 90.96%
+  Per Condition:
+    Benign: 88.89%
+    Malignant: 92.31%
+
+Skin Tone: 6.0
+  Overall F1 Score (Macro): 74.83%
+  Overall F1 Score (Weighted): 75.52%
+  Per Condition:
+    Benign: 72.73%
+    Malignant: 76.92%
+
+Number of misclassified samples: 75
+
+=== MOST COMMON MISCLASSIFICATIONS (OVERALL) ===
+  Malignant → Benign: 39 times
+  Benign → Malignant: 36 times
+
+=== MOST COMMON MISCLASSIFICATIONS BY SKIN TONE ===
+
+Skin Tone 2.0:
+  Benign → Malignant: 16 times
+  Malignant → Benign: 14 times
+
+Skin Tone 3.0:
+  Malignant → Benign: 7 times
+  Benign → Malignant: 4 times
+
+Skin Tone 4.0:
+  Benign → Malignant: 8 times
+  Malignant → Benign: 5 times
+
+Skin Tone 1.0:
+  Malignant → Benign: 8 times
+  Benign → Malignant: 7 times
+
+Skin Tone 5.0:
+  Malignant → Benign: 2 times
+  Benign → Malignant: 1 times
+
+Skin Tone 6.0:
+  Malignant → Benign: 3 times
+GradCAM Plot Path: Logs/gradCAM_20250807_175158.png
+Train Dataset Visualisation: Logs/Train_dataset_20250807_175158.png
+Test Dataset Visualisation: Logs/Test_dataset_20250807_175158.png
+
+
+Python Filename: train_VAE.py
+Datasets: Dermie + Padufes + SCIN + Fitzpatrick17k + India
+Metrics: === OVERALL ACCURACIES ===
+Top-1 Accuracy: 82.63%
+
+=== TOP-1 SENSITIVITY ===
+Condition: Benign, Top-1 Sensitivity: 89.58%
+Condition: Malignant, Top-1 Sensitivity: 75.68%
+Average Top-1 Sensitivity: 82.63%
+
+=== STRATIFIED TOP-1 ACCURACY ===
+Skin Tone: 1.0, Top-1 Accuracy: 77.12%
+Skin Tone: 2.0, Top-1 Accuracy: 80.72%
+Skin Tone: 3.0, Top-1 Accuracy: 88.03%
+Skin Tone: 4.0, Top-1 Accuracy: 87.50%
+Skin Tone: 5.0, Top-1 Accuracy: 87.88%
+Skin Tone: 6.0, Top-1 Accuracy: 66.67%
+
+=== STRATIFIED TOP-1 SENSITIVITY ===
+Skin Tone: 1.0
+  Condition: Benign, Top-1 Sensitivity: 81.97%
+  Condition: Malignant, Top-1 Sensitivity: 71.93%
+
+Skin Tone: 2.0
+  Condition: Benign, Top-1 Sensitivity: 88.75%
+  Condition: Malignant, Top-1 Sensitivity: 73.26%
+
+Skin Tone: 3.0
+  Condition: Benign, Top-1 Sensitivity: 96.43%
+  Condition: Malignant, Top-1 Sensitivity: 80.33%
+
+Skin Tone: 4.0
+  Condition: Benign, Top-1 Sensitivity: 91.11%
+  Condition: Malignant, Top-1 Sensitivity: 81.48%
+
+Skin Tone: 5.0
+  Condition: Benign, Top-1 Sensitivity: 92.31%
+  Condition: Malignant, Top-1 Sensitivity: 85.00%
+
+Skin Tone: 6.0
+  Condition: Benign, Top-1 Sensitivity: 100.00%
+  Condition: Malignant, Top-1 Sensitivity: 50.00%
+
+
+=== BALANCED ACCURACY ===
+Overall Balanced Accuracy: 82.63%
+
+=== STRATIFIED BALANCED ACCURACY ===
+
+Skin Tone: 1.0
+  Overall Balanced Accuracy: 76.95%
+
+Skin Tone: 2.0
+  Overall Balanced Accuracy: 81.00%
+
+Skin Tone: 3.0
+  Overall Balanced Accuracy: 88.38%
+
+Skin Tone: 4.0
+  Overall Balanced Accuracy: 86.30%
+
+Skin Tone: 5.0
+  Overall Balanced Accuracy: 88.65%
+
+Skin Tone: 6.0
+  Overall Balanced Accuracy: 75.00%
+
+=== F1 SCORE ===
+Overall F1 Score (Macro): 82.54%
+Overall F1 Score (Weighted): 82.54%
+
+Per Condition F1 Score:
+  Benign: 83.75%
+  Malignant: 81.33%
+
+=== STRATIFIED F1 SCORE ===
+
+Skin Tone: 1.0
+  Overall F1 Score (Macro): 76.98%
+  Overall F1 Score (Weighted): 77.04%
+  Per Condition:
+    Benign: 78.74%
+    Malignant: 75.23%
+
+Skin Tone: 2.0
+  Overall F1 Score (Macro): 80.68%
+  Overall F1 Score (Weighted): 80.64%
+  Per Condition:
+    Benign: 81.61%
+    Malignant: 79.75%
+
+Skin Tone: 3.0
+  Overall F1 Score (Macro): 88.01%
+  Overall F1 Score (Weighted): 87.99%
+  Per Condition:
+    Benign: 88.52%
+    Malignant: 87.50%
+
+Skin Tone: 4.0
+  Overall F1 Score (Macro): 86.56%
+  Overall F1 Score (Weighted): 87.45%
+  Per Condition:
+    Benign: 90.11%
+    Malignant: 83.02%
+
+Skin Tone: 5.0
+  Overall F1 Score (Macro): 87.59%
+  Overall F1 Score (Weighted): 87.99%
+  Per Condition:
+    Benign: 85.71%
+    Malignant: 89.47%
+
+Skin Tone: 6.0
+  Overall F1 Score (Macro): 66.67%
+  Overall F1 Score (Weighted): 66.67%
+  Per Condition:
+    Benign: 66.67%
+    Malignant: 66.67%
+
+Number of misclassified samples: 90
+
+=== MOST COMMON MISCLASSIFICATIONS (OVERALL) ===
+  Malignant → Benign: 63 times
+  Benign → Malignant: 27 times
+
+=== MOST COMMON MISCLASSIFICATIONS BY SKIN TONE ===
+
+Skin Tone 1.0:
+  Malignant → Benign: 16 times
+  Benign → Malignant: 11 times
+
+Skin Tone 2.0:
+  Malignant → Benign: 23 times
+  Benign → Malignant: 9 times
+
+Skin Tone 4.0:
+  Malignant → Benign: 5 times
+  Benign → Malignant: 4 times
+
+Skin Tone 3.0:
+  Malignant → Benign: 12 times
+  Benign → Malignant: 2 times
+
+Skin Tone 6.0:
+  Malignant → Benign: 4 times
+
+Skin Tone 5.0:
+  Malignant → Benign: 3 times
+  Benign → Malignant: 1 times
+GradCAM Plot Path: Logs/gradCAM_20250807_180031.png
+Train Dataset Visualisation: Logs/Train_dataset_20250807_180031.png
+Test Dataset Visualisation: Logs/Test_dataset_20250807_180031.png
+
+
+
+

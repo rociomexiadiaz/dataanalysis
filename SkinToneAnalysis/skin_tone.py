@@ -301,12 +301,28 @@ def create_model_skin_tone_charts(sensitivity_data, f1_data, save_path):
                 else:
                     scores.append(0)
             
-            ax1.bar(x + i*width, scores, width, 
+            bars = ax1.bar(x + i*width, scores, width, 
                    label=f'FST {int(fst)}', 
                    color=fst_color_map[fst], 
                    alpha=0.8, 
                    edgecolor='black', 
                    linewidth=0.5)
+            
+            for bar, val in zip(bars, scores):
+                height = bar.get_height()
+                xpos = bar.get_x() + bar.get_width() / 2
+                ypos = height 
+
+                if np.isfinite(xpos) and np.isfinite(ypos) and np.isfinite(val):
+                    ax1.text(
+                        xpos,
+                        ypos,
+                        f'{val:.0f}',
+                        ha='center',
+                        va='bottom',
+                        fontsize=9,
+                        color='black'
+                    )
         
         ax1.set_xlabel('Model', fontsize=12)
         ax1.set_ylabel('F1 Score (%)', fontsize=12)
@@ -329,7 +345,7 @@ def create_model_skin_tone_charts(sensitivity_data, f1_data, save_path):
         
         # Add value labels
         for bar, std_val in zip(bars, f1_std.values):
-            ax2.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.5,
+            ax2.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.1,
                     f'{std_val:.1f}', ha='center', va='bottom', fontweight='bold')
         
         ax2.set_xlabel('Model', fontsize=12)

@@ -12,6 +12,8 @@ sys.path.append(parent_dir)
 
 from dataframe import parse_combined_log
 
+# Add this F1 score parsing logic to your parse_combined_log function in the dataframe module
+
 def parse_all_log_files(log_directory='./'):
     """Parse all log files and combine into a single dataset"""
     
@@ -22,7 +24,8 @@ def parse_all_log_files(log_directory='./'):
         'SkinToneAccuracies': [],
         'StratifiedSensitivities': [],
         'MisclassifiedCounts': [],
-        'MisclassificationDetails': []
+        'MisclassificationDetails': [],
+        'F1Scores':[]
     }
     
     # Parse combined_all.txt (all models on all datasets)
@@ -74,6 +77,7 @@ def parse_baseline_datasets_log(filepath):
     stratified_sensitivities = []
     misclassifications = []
     misclassifications_by_tone = []
+    f1_scores = []  # NEW: Add F1 scores container
 
     for block in model_blocks:
         if not block.strip():
@@ -144,6 +148,76 @@ def parse_baseline_datasets_log(filepath):
                     'Value': float(value)
                 })
 
+        ### 5. NEW: Parse F1 Score data
+        # Overall F1 Scores (Macro and Weighted)
+        for f1_type in ['Macro', 'Weighted']:
+            match = re.search(rf'Overall F1 Score \({f1_type}\):\s*([\d.]+)%', block)
+            if match:
+                f1_scores.append({
+                    'Model': model,
+                    'Datasets': dataset_combination,
+                    'Skin Tone': None,  # Overall score, no specific skin tone
+                    'Condition': 'Overall',
+                    'Metric': f'F1 Score ({f1_type})',
+                    'Value': float(match.group(1))
+                })
+
+        # Per Condition F1 Scores (from main F1 SCORE section)
+        f1_section = re.search(r'=== F1 SCORE ===(.+?)(?==== |$)', block, re.DOTALL)
+        if f1_section:
+            f1_content = f1_section.group(1)
+            condition_matches = re.findall(r'^\s*([^:]+):\s*([\d.]+)%', f1_content, re.MULTILINE)
+            for condition, value in condition_matches:
+                condition = condition.strip()
+                f1_scores.append({
+                    'Model': model,
+                    'Datasets': dataset_combination,
+                    'Skin Tone': None,  # Overall per condition, no specific skin tone
+                    'Condition': condition,
+                    'Metric': 'F1 Score',
+                    'Value': float(value)
+                })
+
+        # Stratified F1 Scores by Skin Tone
+        stratified_f1_section = re.search(r'=== STRATIFIED F1 SCORE ===(.+?)(?==== |$)', block, re.DOTALL)
+        if stratified_f1_section:
+            stratified_content = stratified_f1_section.group(1)
+            
+            # Find all skin tone blocks
+            skin_tone_blocks = re.findall(r'Skin Tone:\s*([\d.]+)(.*?)(?=Skin Tone:|$)', stratified_content, re.DOTALL)
+            
+            for tone, tone_content in skin_tone_blocks:
+                tone_val = float(tone)
+                
+                # Overall F1 scores for this skin tone
+                for f1_type in ['Macro', 'Weighted']:
+                    match = re.search(rf'Overall F1 Score \({f1_type}\):\s*([\d.]+)%', tone_content)
+                    if match:
+                        f1_scores.append({
+                            'Model': model,
+                            'Datasets': dataset_combination,
+                            'Skin Tone': tone_val,
+                            'Condition': 'Overall',
+                            'Metric': f'F1 Score ({f1_type})',
+                            'Value': float(match.group(1))
+                        })
+                
+                # Per Condition F1 scores for this skin tone
+                per_condition_section = re.search(r'Per Condition:(.*?)(?=\n\nSkin Tone:|$)', tone_content, re.DOTALL)
+                if per_condition_section:
+                    condition_content = per_condition_section.group(1)
+                    condition_matches = re.findall(r'^\s*([^:]+):\s*([\d.]+)%', condition_content, re.MULTILINE)
+                    for condition, value in condition_matches:
+                        condition = condition.strip()
+                        f1_scores.append({
+                            'Model': model,
+                            'Datasets': dataset_combination,
+                            'Skin Tone': tone_val,
+                            'Condition': condition,
+                            'Metric': 'F1 Score',
+                            'Value': float(value)
+                        })
+
     # Convert all to DataFrames
     return {
         'AverageSensitivities': pd.DataFrame(avg_sensitivities),
@@ -151,8 +225,10 @@ def parse_baseline_datasets_log(filepath):
         'SkinToneAccuracies': pd.DataFrame(skin_tone_sensitivities),
         'StratifiedSensitivities': pd.DataFrame(stratified_sensitivities),
         'MisclassifiedCounts': pd.DataFrame(misclassifications),
-        'MisclassificationDetails': pd.DataFrame(misclassifications_by_tone)
+        'MisclassificationDetails': pd.DataFrame(misclassifications_by_tone),
+        'F1Scores': pd.DataFrame(f1_scores)  # NEW: Return F1 scores dataframe
     }
+
 
 # Fitzpatrick Skin Tone color mapping
 fst_color_map = {
@@ -192,6 +268,7 @@ def create_skin_tone_plot_with_disparity(data, x_col, title, ylabel, save_path, 
     x = np.arange(len(x_values))
     width = 0.8 / len(skin_tones)
     
+    plotted_tones = set()
     for i, tone in enumerate(skin_tones):
         values = []
         errors = []
@@ -204,9 +281,32 @@ def create_skin_tone_plot_with_disparity(data, x_col, title, ylabel, save_path, 
                 values.append(0)
                 errors.append(0)
         
-        ax1.bar(x + i * width, values, width, yerr=errors, capsize=4,
-                label=f'FST {tone}', color=fst_color_map[tone], alpha=0.8, edgecolor='black', linewidth=0.5)
+        bar_positions = x + i * width
+        label = f'FST {tone}' if tone not in plotted_tones else None
+        bars = ax1.bar(bar_positions, values, width, yerr=errors, capsize=4,
+                    label=label, color=fst_color_map[tone], alpha=0.8, edgecolor='black', linewidth=0.5)
+
+        plotted_tones.add(tone)
+
+        # Add value labels on top of bars
+        for bar, val in zip(bars, values):
+            height = bar.get_height()
+            xpos = bar.get_x() + bar.get_width() / 2
+            ypos = height + 1.0  # Adjust offset as needed (1.0 works in most cases)
+
+            if np.isfinite(xpos) and np.isfinite(ypos) and np.isfinite(val):
+                ax1.text(
+                    xpos,
+                    ypos,
+                    f'{val:.1f}',
+                    ha='center',
+                    va='bottom',
+                    fontsize=9,
+                    color='black'
+                )
+
     
+      
     ax1.set_xlabel(x_col.replace('_', ' ').title())
     ax1.set_ylabel(ylabel)
     ax1.set_title(f'{title} - {condition_name}')
@@ -223,8 +323,25 @@ def create_skin_tone_plot_with_disparity(data, x_col, title, ylabel, save_path, 
     
     x_disp = np.arange(len(x_values))
     
-    ax2.bar(x_disp, disparity_std.values, 
+    bars = ax2.bar(x_disp, disparity_std.values, 
             color='#abdda4', alpha=0.8, edgecolor='black', linewidth=0.5)
+    
+    for bar, val in zip(bars, disparity_std):
+            height = bar.get_height()
+            xpos = bar.get_x() + bar.get_width() / 2
+            ypos = height + 0.1
+            if np.isfinite(xpos) and np.isfinite(ypos) and np.isfinite(val):
+                ax2.text(
+                    xpos,
+                    ypos,
+                    f'{val:.1f}',
+                    ha='center',
+                    va='bottom',
+                    fontsize=9,
+                    color='black'
+                )
+
+    
     
     ax2.set_xlabel(x_col.replace('_', ' ').title())
     ax2.set_ylabel('Skin Tone Disparity (Std)')
@@ -242,6 +359,7 @@ def create_skin_tone_plot_with_disparity(data, x_col, title, ylabel, save_path, 
     
     print(f"Saved: {filename}")
 
+
 def generate_condition_plots(df_dict, save_path='./'):
     """Generate the 4 required plots for each condition"""
     
@@ -255,39 +373,51 @@ def generate_condition_plots(df_dict, save_path='./'):
                 'train_TABE': 'TABE'
             })
     
-    # Use StratifiedSensitivities since it has both Condition and Skin Tone columns
+    # Use separate dataframes for F1 and sensitivity plots
+    f1_data = df_dict['F1Scores']
     stratified_data = df_dict['StratifiedSensitivities']
     
-    if stratified_data.empty:
-        print("No stratified sensitivity data found!")
+    if f1_data.empty and stratified_data.empty:
+        print("No F1 or stratified sensitivity data found!")
         return
     
-    conditions = stratified_data['Condition'].unique()
+    # Get conditions from both dataframes
+    conditions = set()
+    if not f1_data.empty:
+        conditions.update(f1_data['Condition'].unique())
+    if not stratified_data.empty:
+        conditions.update(stratified_data['Condition'].unique())
+    
+    # Remove 'Overall' from conditions for condition-specific plots
+    conditions = [c for c in conditions if c != 'Overall']
     print(f"Found conditions: {conditions}")
     
     # Debug: Print available data sources and datasets
     print("\nDebug info:")
-    print(f"Available Sources: {stratified_data['Source'].unique() if 'Source' in stratified_data.columns else 'No Source column'}")
-    print(f"Available Datasets: {stratified_data['Datasets'].unique()}")
-    print(f"Available Models: {stratified_data['Model'].unique()}")
+    if not f1_data.empty:
+        print("F1 Data:")
+        print(f"  Available Sources: {f1_data['Source'].unique() if 'Source' in f1_data.columns else 'No Source column'}")
+        print(f"  Available Datasets: {f1_data['Datasets'].unique()}")
+        print(f"  Available Models: {f1_data['Model'].unique()}")
+        print(f"  Available Metrics: {f1_data['Metric'].unique()}")
+        print(f"  Available Conditions: {f1_data['Condition'].unique()}")
+    
+    if not stratified_data.empty:
+        print("Stratified Data:")
+        print(f"  Available Sources: {stratified_data['Source'].unique() if 'Source' in stratified_data.columns else 'No Source column'}")
+        print(f"  Available Datasets: {stratified_data['Datasets'].unique()}")
+        print(f"  Available Models: {stratified_data['Model'].unique()}")
     
     for condition in conditions:
         print(f"\nGenerating plots for condition: {condition}")
         
-        # Debug: Show what data is available for this condition
-        condition_data = stratified_data[stratified_data['Condition'] == condition]
-        print(f"  Total rows for {condition}: {len(condition_data)}")
-        print(f"  Available Sources: {condition_data['Source'].unique() if 'Source' in condition_data.columns else 'No Source column'}")
-        print(f"  Available Datasets: {condition_data['Datasets'].unique()}")
-        print(f"  Available Models: {condition_data['Model'].unique()}")
-        print(f"  Available Metrics: {condition_data['Metric'].unique()}")
-        
-        # 1. F1 Score by Dataset (using baseline model data from different dataset combinations)
-        f1_dataset_data = stratified_data[
-            (stratified_data['Condition'] == condition) &
-            (stratified_data['Source'] == 'baseline_datasets') &  # Data from baseline_datasets file
-            (stratified_data['Metric'] == 'Top-1 Sensitivity')
-        ]
+        # 1. F1 Score by Dataset (using F1Scores dataframe with baseline_datasets source)
+        f1_dataset_data = f1_data.query(
+            f"Condition == '{condition}' and "
+            f"Source == 'baseline_datasets' and "
+            f"Metric == 'F1 Score' and "
+            f"`Skin Tone`.notna()"
+        ).copy()
         
         print(f"  F1 dataset data rows: {len(f1_dataset_data)}")
         if not f1_dataset_data.empty:
@@ -297,14 +427,21 @@ def generate_condition_plots(df_dict, save_path='./'):
                 save_path, condition, 'f1_score_by_dataset_skin_with_disparity.png'
             )
         else:
-            print(f"No dataset data found for {condition}")
+            print(f"No F1 dataset data found for {condition}")
+            # Debug what's available
+            debug_f1_baseline = f1_data.query("Source == 'baseline_datasets'").copy()
+            print(f"    Total baseline F1 data: {len(debug_f1_baseline)}")
+            if not debug_f1_baseline.empty:
+                print(f"    Available conditions in baseline F1: {debug_f1_baseline['Condition'].unique()}")
+                print(f"    Available metrics in baseline F1: {debug_f1_baseline['Metric'].unique()}")
         
-        # 2. F1 Score by Model (using all models on all datasets)
-        f1_model_data = stratified_data[
-            (stratified_data['Condition'] == condition) &
-            (stratified_data['Source'] == 'all_models') &  # Data from all_models file
-            (stratified_data['Metric'] == 'Top-1 Sensitivity')
-        ]
+        # 2. F1 Score by Model (using F1Scores dataframe with all_models source)
+        f1_model_data = f1_data.query(
+            f"Condition == '{condition}' and "
+            f"Source == 'all_models' and "
+            f"Metric == 'F1 Score' and "
+            f"`Skin Tone`.notna()"
+        ).copy()
         
         print(f"  F1 model data rows: {len(f1_model_data)}")
         if not f1_model_data.empty:
@@ -314,14 +451,20 @@ def generate_condition_plots(df_dict, save_path='./'):
                 save_path, condition, 'f1_score_by_model_skin_with_disparity.png'
             )
         else:
-            print(f"No model data found for {condition}")
+            print(f"No F1 model data found for {condition}")
+            # Debug what's available
+            debug_f1_all = f1_data.query("Source == 'all_models'").copy()
+            print(f"    Total all_models F1 data: {len(debug_f1_all)}")
+            if not debug_f1_all.empty:
+                print(f"    Available conditions in all_models F1: {debug_f1_all['Condition'].unique()}")
+                print(f"    Available metrics in all_models F1: {debug_f1_all['Metric'].unique()}")
         
-        # 3. Sensitivity by Dataset (using baseline model data from different dataset combinations)
-        sens_dataset_data = stratified_data[
-            (stratified_data['Condition'] == condition) &
-            (stratified_data['Source'] == 'baseline_datasets') &
-            (stratified_data['Metric'] == 'Top-1 Sensitivity')
-        ]
+        # 3. Sensitivity by Dataset (using StratifiedSensitivities dataframe)
+        sens_dataset_data = stratified_data.query(
+            f"Condition == '{condition}' and "
+            f"Source == 'baseline_datasets' and "
+            f"Metric == 'Top-1 Sensitivity'"
+        ).copy() if not stratified_data.empty else pd.DataFrame()
         
         print(f"  Sensitivity dataset data rows: {len(sens_dataset_data)}")
         if not sens_dataset_data.empty:
@@ -333,12 +476,12 @@ def generate_condition_plots(df_dict, save_path='./'):
         else:
             print(f"No dataset sensitivity data found for {condition}")
         
-        # 4. Sensitivity by Model (using all models on all datasets)
-        sens_model_data = stratified_data[
-            (stratified_data['Condition'] == condition) &
-            (stratified_data['Source'] == 'all_models') &
-            (stratified_data['Metric'] == 'Top-1 Sensitivity')
-        ]
+        # 4. Sensitivity by Model (using StratifiedSensitivities dataframe)
+        sens_model_data = stratified_data.query(
+            f"Condition == '{condition}' and "
+            f"Source == 'all_models' and "
+            f"Metric == 'Top-1 Sensitivity'"
+        ).copy() if not stratified_data.empty else pd.DataFrame()
         
         print(f"  Sensitivity model data rows: {len(sens_model_data)}")
         if not sens_model_data.empty:
@@ -349,15 +492,6 @@ def generate_condition_plots(df_dict, save_path='./'):
             )
         else:
             print(f"No model sensitivity data found for {condition}")
-            # Additional debug for model data
-            all_models_data = stratified_data[
-                (stratified_data['Condition'] == condition) &
-                (stratified_data['Source'] == 'all_models')
-            ]
-            print(f"    All models data for {condition}: {len(all_models_data)} rows")
-            if not all_models_data.empty:
-                print(f"    Available Datasets in all_models: {all_models_data['Datasets'].unique()}")
-                print(f"    Available Metrics in all_models: {all_models_data['Metric'].unique()}")
 
 
 def main():

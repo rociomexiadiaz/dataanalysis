@@ -158,6 +158,202 @@ def parse_generalization_results(filepath):
             pd.DataFrame(top3_sensitivity_results), 
             pd.DataFrame(top5_sensitivity_results))
 
+def plot_overall_performance(balanced_acc_df, top3_sensitivity_df, top5_sensitivity_df, save_path):
+    """
+    Create three separate bar charts showing overall (unstratified) performance across all skin tones
+    """
+    
+    # ===== PLOT 1: OVERALL BALANCED ACCURACY =====
+    
+    if not balanced_acc_df.empty:
+        fig1, ax1 = plt.subplots(1, 1, figsize=(10, 8))
+        
+        # Calculate overall mean and std for balanced accuracy (across all skin tones)
+        overall_bal_acc_stats = balanced_acc_df.groupby(['Model', 'Test_Dataset'])['Balanced_Accuracy'].mean().reset_index()
+        overall_bal_acc_stats = overall_bal_acc_stats.groupby('Model')['Balanced_Accuracy'].agg(['mean', 'std', 'count']).reset_index()
+        overall_bal_acc_stats['std'] = overall_bal_acc_stats['std'].fillna(0)
+        
+        print("Overall Balanced Accuracy Statistics:")
+        print(overall_bal_acc_stats)
+        
+        # Prepare data for plotting
+        models = overall_bal_acc_stats['Model'].tolist()
+        means = overall_bal_acc_stats['mean'].tolist()
+        stds = overall_bal_acc_stats['std'].tolist()
+        
+        # Create color palette
+        colors = plt.cm.Set3(np.linspace(0, 1, len(models)))
+        
+        # Plot bars with error bars
+        bars = ax1.bar(
+            models, 
+            means, 
+            yerr=stds,
+            capsize=8,
+            color=colors,
+            alpha=0.8,
+            edgecolor='black',
+            linewidth=1.5
+        )
+        
+        # Add value labels on bars
+        for bar, mean_val, std_val in zip(bars, means, stds):
+            height = bar.get_height()
+            ax1.text(bar.get_x() + bar.get_width()/2., height + std_val + 1,
+                   f'{mean_val:.1f}%',
+                   ha='center', va='bottom', fontsize=12, fontweight='bold')
+        
+        # Customize plot
+        ax1.set_xlabel('Model', fontsize=14, fontweight='bold')
+        ax1.set_ylabel('Overall Balanced Accuracy (%)', fontsize=14, fontweight='bold')
+        ax1.set_title('Cross-Dataset Generalization: Overall Balanced Accuracy\n(Averaged Across All Skin Tones)', 
+                    fontsize=16, fontweight='bold', pad=20)
+        
+        ax1.tick_params(axis='x', labelsize=12)
+        ax1.tick_params(axis='y', labelsize=12)
+        ax1.grid(True, alpha=0.3, linestyle='--')
+        ax1.set_axisbelow(True)
+        
+        # Set y-axis limit with some padding
+        max_val = max([m + s for m, s in zip(means, stds)])
+        ax1.set_ylim(0, max_val * 1.15)
+        
+        # Save plot
+        output_path1 = os.path.join(save_path, 'overall_balanced_accuracy.png')
+        plt.savefig(output_path1, dpi=300, bbox_inches='tight', facecolor='white')
+        print(f"Overall Balanced Accuracy plot saved to: {output_path1}")
+        plt.close(fig1)
+    else:
+        print("No Overall Balanced Accuracy Data Available")
+    
+    # ===== PLOT 2: OVERALL TOP-3 SENSITIVITY =====
+    
+    if not top3_sensitivity_df.empty:
+        fig2, ax2 = plt.subplots(1, 1, figsize=(10, 8))
+        
+        # Calculate overall mean and std for Top-3 sensitivity (across all skin tones)
+        overall_top3_stats = top3_sensitivity_df.groupby(['Model', 'Test_Dataset'])['Mean_Top3_Sensitivity'].mean().reset_index()
+        overall_top3_stats = overall_top3_stats.groupby('Model')['Mean_Top3_Sensitivity'].agg(['mean', 'std', 'count']).reset_index()
+        overall_top3_stats['std'] = overall_top3_stats['std'].fillna(0)
+        
+        print("\nOverall Top-3 Sensitivity Statistics:")
+        print(overall_top3_stats)
+        
+        # Prepare data for plotting
+        models = overall_top3_stats['Model'].tolist()
+        means = overall_top3_stats['mean'].tolist()
+        stds = overall_top3_stats['std'].tolist()
+        
+        # Create color palette
+        colors = plt.cm.Set2(np.linspace(0, 1, len(models)))
+        
+        # Plot bars with error bars
+        bars = ax2.bar(
+            models, 
+            means, 
+            yerr=stds,
+            capsize=8,
+            color=colors,
+            alpha=0.8,
+            edgecolor='black',
+            linewidth=1.5
+        )
+        
+        # Add value labels on bars
+        for bar, mean_val, std_val in zip(bars, means, stds):
+            height = bar.get_height()
+            ax2.text(bar.get_x() + bar.get_width()/2., height + std_val + 2,
+                   f'{mean_val:.1f}%',
+                   ha='center', va='bottom', fontsize=12, fontweight='bold')
+        
+        # Customize plot
+        ax2.set_xlabel('Model', fontsize=14, fontweight='bold')
+        ax2.set_ylabel('Overall Mean Top-3 Sensitivity (%)', fontsize=14, fontweight='bold')
+        ax2.set_title('Cross-Dataset Generalization: Overall Mean Top-3 Sensitivity\n(Averaged Across All Skin Tones)', 
+                    fontsize=16, fontweight='bold', pad=20)
+        
+        ax2.tick_params(axis='x', labelsize=12)
+        ax2.tick_params(axis='y', labelsize=12)
+        ax2.grid(True, alpha=0.3, linestyle='--')
+        ax2.set_axisbelow(True)
+        
+        # Set y-axis limit with some padding
+        max_val = max([m + s for m, s in zip(means, stds)])
+        ax2.set_ylim(0, max_val * 1.15)
+        
+        # Save plot
+        output_path2 = os.path.join(save_path, 'overall_top3_sensitivity.png')
+        plt.savefig(output_path2, dpi=300, bbox_inches='tight', facecolor='white')
+        print(f"Overall Top-3 Sensitivity plot saved to: {output_path2}")
+        plt.close(fig2)
+    else:
+        print("No Overall Top-3 Sensitivity Data Available")
+    
+    # ===== PLOT 3: OVERALL TOP-5 SENSITIVITY =====
+    
+    if not top5_sensitivity_df.empty:
+        fig3, ax3 = plt.subplots(1, 1, figsize=(10, 8))
+        
+        # Calculate overall mean and std for Top-5 sensitivity (across all skin tones)
+        overall_top5_stats = top5_sensitivity_df.groupby(['Model', 'Test_Dataset'])['Mean_Top5_Sensitivity'].mean().reset_index()
+        overall_top5_stats = overall_top5_stats.groupby('Model')['Mean_Top5_Sensitivity'].agg(['mean', 'std', 'count']).reset_index()
+        overall_top5_stats['std'] = overall_top5_stats['std'].fillna(0)
+        
+        print("\nOverall Top-5 Sensitivity Statistics:")
+        print(overall_top5_stats)
+        
+        # Prepare data for plotting
+        models = overall_top5_stats['Model'].tolist()
+        means = overall_top5_stats['mean'].tolist()
+        stds = overall_top5_stats['std'].tolist()
+        
+        # Create color palette
+        colors = plt.cm.Dark2(np.linspace(0, 1, len(models)))
+        
+        # Plot bars with error bars
+        bars = ax3.bar(
+            models, 
+            means, 
+            yerr=stds,
+            capsize=8,
+            color=colors,
+            alpha=0.8,
+            edgecolor='black',
+            linewidth=1.5
+        )
+        
+        # Add value labels on bars
+        for bar, mean_val, std_val in zip(bars, means, stds):
+            height = bar.get_height()
+            ax3.text(bar.get_x() + bar.get_width()/2., height + std_val + 2,
+                   f'{mean_val:.1f}%',
+                   ha='center', va='bottom', fontsize=12, fontweight='bold')
+        
+        # Customize plot
+        ax3.set_xlabel('Model', fontsize=14, fontweight='bold')
+        ax3.set_ylabel('Overall Mean Top-5 Sensitivity (%)', fontsize=14, fontweight='bold')
+        ax3.set_title('Cross-Dataset Generalization: Overall Mean Top-5 Sensitivity\n(Averaged Across All Skin Tones)', 
+                    fontsize=16, fontweight='bold', pad=20)
+        
+        ax3.tick_params(axis='x', labelsize=12)
+        ax3.tick_params(axis='y', labelsize=12)
+        ax3.grid(True, alpha=0.3, linestyle='--')
+        ax3.set_axisbelow(True)
+        
+        # Set y-axis limit with some padding
+        max_val = max([m + s for m, s in zip(means, stds)])
+        ax3.set_ylim(0, max_val * 1.15)
+        
+        # Save plot
+        output_path3 = os.path.join(save_path, 'overall_top5_sensitivity.png')
+        plt.savefig(output_path3, dpi=300, bbox_inches='tight', facecolor='white')
+        print(f"Overall Top-5 Sensitivity plot saved to: {output_path3}")
+        plt.close(fig3)
+    else:
+        print("No Overall Top-5 Sensitivity Data Available")
+    
+    print(f"\nAll overall plots saved to: {save_path}")
+
 def plot_generalization_performance(balanced_acc_df, top3_sensitivity_df, top5_sensitivity_df, save_path):
     """
     Create three separate bar charts showing balanced accuracy, Top-3 sensitivity, and Top-5 sensitivity by model and skin tone
@@ -249,6 +445,7 @@ def plot_generalization_performance(balanced_acc_df, top3_sensitivity_df, top5_s
         output_path1 = os.path.join(save_path, 'balanced_accuracy_by_skin_tone.png')
         plt.savefig(output_path1, dpi=300, bbox_inches='tight', facecolor='white')
         print(f"Balanced Accuracy plot saved to: {output_path1}")
+        plt.close(fig1)
     else:
         print("No Balanced Accuracy Data Available")
     
@@ -305,7 +502,7 @@ def plot_generalization_performance(balanced_acc_df, top3_sensitivity_df, top5_s
             # Add value labels on bars
             for j, (bar, mean_val, std_val) in enumerate(zip(bars, means, stds)):
                 if mean_val > 5:  # Only label bars with reasonable values
-                    height = bar.get_height()
+                    height = bar.get_header()
                     ax2.text(bar.get_x() + bar.get_width()/2., height + std_val + 2,
                            f'{mean_val:.1f}%',
                            ha='center', va='bottom', fontsize=8, fontweight='bold')
@@ -328,6 +525,7 @@ def plot_generalization_performance(balanced_acc_df, top3_sensitivity_df, top5_s
         output_path2 = os.path.join(save_path, 'top3_sensitivity_by_skin_tone.png')
         plt.savefig(output_path2, dpi=300, bbox_inches='tight', facecolor='white')
         print(f"Top-3 Sensitivity plot saved to: {output_path2}")
+        plt.close(fig2)
     else:
         print("No Top-3 Sensitivity Data Available")
     
@@ -407,10 +605,11 @@ def plot_generalization_performance(balanced_acc_df, top3_sensitivity_df, top5_s
         output_path3 = os.path.join(save_path, 'top5_sensitivity_by_skin_tone.png')
         plt.savefig(output_path3, dpi=300, bbox_inches='tight', facecolor='white')
         print(f"Top-5 Sensitivity plot saved to: {output_path3}")
+        plt.close(fig3)
     else:
         print("No Top-5 Sensitivity Data Available")
     
-    print(f"\nAll plots saved to: {save_path}")
+    print(f"\nAll stratified plots saved to: {save_path}")
 
 def analyze_performance_patterns(balanced_acc_df, top3_sensitivity_df, top5_sensitivity_df):
     """
@@ -616,14 +815,27 @@ def main():
     if not top5_sensitivity_df.empty:
         print(f"  - Models (Top-5 Sensitivity): {top5_sensitivity_df['Model'].unique()}")
     
-    # Create the visualizations (three separate plots)
-    print("\nCreating performance visualizations...")
+    # Create the stratified visualizations (by skin tone)
+    print("\nCreating stratified performance visualizations (by skin tone)...")
     plot_generalization_performance(balanced_acc_df, top3_sensitivity_df, top5_sensitivity_df, output_directory)
+    
+    # Create the overall visualizations (averaged across skin tones)
+    print("\nCreating overall performance visualizations (averaged across all skin tones)...")
+    plot_overall_performance(balanced_acc_df, top3_sensitivity_df, top5_sensitivity_df, output_directory)
     
     # Analyze patterns for all metrics
     analyze_performance_patterns(balanced_acc_df, top3_sensitivity_df, top5_sensitivity_df)
     
     print(f"\nAnalysis complete! All outputs saved to: {output_directory}")
+    print("\nGenerated plots:")
+    print("  Stratified plots (by skin tone):")
+    print("    - balanced_accuracy_by_skin_tone.png")
+    print("    - top3_sensitivity_by_skin_tone.png")
+    print("    - top5_sensitivity_by_skin_tone.png")
+    print("  Overall plots (averaged across skin tones):")
+    print("    - overall_balanced_accuracy.png")
+    print("    - overall_top3_sensitivity.png")
+    print("    - overall_top5_sensitivity.png")
 
 if __name__ == "__main__":
     main()
